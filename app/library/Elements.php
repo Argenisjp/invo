@@ -12,11 +12,15 @@ class Elements extends Component
     private $_headerMenu = [
         'navbar-left' => [
             'index' => [
-                'caption' => 'Home',
+                'caption' => 'Inicio',
                 'action' => 'index'
             ],
             'personas' => [
                 'caption' => 'Personas',
+                'action' => 'index'
+            ],
+            'clientes' => [
+                'caption' => 'Clientes',
                 'action' => 'index'
             ],
             'about' => [
@@ -39,6 +43,11 @@ class Elements extends Component
     private $_tabs = [
         'Personas' => [
             'controller' => 'personas',
+            'action' => 'index',
+            'any' => false
+        ],
+        'Clientes' => [
+            'controller' => 'clientes',
             'action' => 'index',
             'any' => false
         ],
