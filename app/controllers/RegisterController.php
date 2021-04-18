@@ -3,7 +3,7 @@
 /**
  * SessionController
  *
- * Allows to register new users
+ * Permite registrar nuevos usuarios.
  */
 class RegisterController extends ControllerBase
 {
@@ -15,7 +15,7 @@ class RegisterController extends ControllerBase
     }
 
     /**
-     * Action to register a new user
+     * Acción para registrar un nuevo usuario
      */
     public function indexAction()
     {

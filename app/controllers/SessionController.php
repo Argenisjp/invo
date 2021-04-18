@@ -3,7 +3,7 @@
 /**
  * SessionController
  *
- * Allows to authenticate users
+ * Permite autenticar usuarios
  */
 class SessionController extends ControllerBase
 {
@@ -17,16 +17,20 @@ class SessionController extends ControllerBase
     public function indexAction()
     {
         if (!$this->request->isPost()) {
-            $this->tag->setDefault('email', 'demo');
+            $this->tag->setDefault('email', 'Demo');
             $this->tag->setDefault('password', 'phalcon');
         }
     }
 
+
+   /*  Registrar un usuario autenticado en los datos de la sesión */
     /**
      * Register an authenticated user into session data
+     * 
      *
      * @param Users $user
      */
+
     private function _registerSession(Users $user)
     {
         $this->session->set(
@@ -39,7 +43,7 @@ class SessionController extends ControllerBase
     }
 
     /**
-     * This action authenticate and logs an user into the application
+     * Esta acción autentica y registra a un usuario en la aplicación.
      */
     public function startAction()
     {
@@ -60,7 +64,7 @@ class SessionController extends ControllerBase
             if ($user != false) {
                 $this->_registerSession($user);
 
-                $this->flash->success('Welcome ' . $user->name);
+                $this->flash->success('Bienvenido ' . $user->username);
 
                 return $this->dispatcher->forward(
                     [
@@ -70,7 +74,7 @@ class SessionController extends ControllerBase
                 );
             }
 
-            $this->flash->error('Wrong email/password');
+            $this->flash->error('Correo electrónico / contraseña incorrectos');
         }
 
         return $this->dispatcher->forward(
@@ -81,6 +85,8 @@ class SessionController extends ControllerBase
         );
     }
 
+
+   /*  Termina la sesión activa redireccionando al índice */
     /**
      * Finishes the active session redirecting to the index
      *

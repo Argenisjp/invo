@@ -13,7 +13,7 @@ class clientesController extends ControllerBase
     }
 
     /**
-     * Shows the index action
+     * Muestra la acción del índice.
      */
     public function indexAction()
     {
@@ -53,7 +53,7 @@ class clientesController extends ControllerBase
     }
 
     /**
-     * Search clientes based on current criteria
+     * Buscar clientes según los criterios actuales
      */
     public function searchAction()
     {
@@ -100,7 +100,7 @@ class clientesController extends ControllerBase
     }
 
     /**
-     * Shows the form to create a new clientes
+     * Muestra el formulario para crear nuevos clientes.
      */
     public function newAction()
     {
@@ -113,7 +113,7 @@ class clientesController extends ControllerBase
     }
 
     /**
-     * Editar  clientes based on its id
+     * Editar  clientes basado en su id
      * @param string $id
      * 
      */
@@ -199,7 +199,7 @@ class clientesController extends ControllerBase
     }
 
     /**
-     * Saves current clientes in screen
+     * Guarda a los clientes actuales en la pantalla
      *
      * @param string $clienteid
      */

@@ -13,19 +13,19 @@ use Phalcon\Events\Manager as EventsManager;
 class Services extends \Base\Services
 {
     /**
-     * We register the events manager
+     * Registramos al gestor de eventos
      */
     protected function initDispatcher()
     {
         $eventsManager = new EventsManager;
 
         /**
-         * Check if the user is allowed to access certain action using the SecurityPlugin
+         * Compruebe si el usuario tiene permiso para acceder a determinada acción utilizando       SecurityPlugin
          */
         $eventsManager->attach('dispatch:beforeExecuteRoute', new SecurityPlugin);
 
         /**
-         * Handle exceptions and not-found exceptions using NotFoundPlugin
+         * Manejar excepciones y excepciones no encontradas usando NotFoundPlugin
          */
         $eventsManager->attach('dispatch:beforeException', new NotFoundPlugin);
 
@@ -36,7 +36,7 @@ class Services extends \Base\Services
     }
 
     /**
-     * The URL component is used to generate all kind of urls in the application
+     * El componente URL se utiliza para generar todo tipo de URL en la aplicación.
      */
     protected function initUrl()
     {
@@ -59,7 +59,7 @@ class Services extends \Base\Services
     }
 
     /**
-     * Setting up volt
+     * Configuración de voltios
      */
     protected function initSharedVolt($view, $di)
     {
@@ -76,7 +76,7 @@ class Services extends \Base\Services
     }
 
     /**
-     * Database connection is created based in the parameters defined in the configuration file
+     * La conexión a la base de datos se crea en base a los parámetros definidos en el archivo de configuración.
      */
     protected function initSharedDb()
     {
@@ -89,7 +89,8 @@ class Services extends \Base\Services
     }
 
     /**
-     * If the configuration specify the use of metadata adapter use it or use memory otherwise
+     * Si la configuración especifica el uso del adaptador de metadatos, utilícelo o utilice la memoria de otro modo
+
      */
     protected function initModelsMetadata()
     {
@@ -97,7 +98,8 @@ class Services extends \Base\Services
     }
 
     /**
-     * Start the session the first time some component request the session service
+     * 
+     * Inicie la sesión la primera vez que algún componente solicite el servicio de sesión
      */
     protected function initSession()
     {
@@ -107,7 +109,7 @@ class Services extends \Base\Services
     }
 
     /**
-     * Register the flash service with custom CSS classes
+     * Registre el servicio flash con clases CSS personalizadas
      */
     protected function initFlash()
     {
@@ -120,7 +122,7 @@ class Services extends \Base\Services
     }
 
     /**
-     * Register a user component
+     * Registrar un componente de usuario
      */
     protected function initElements()
     {

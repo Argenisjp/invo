@@ -13,7 +13,7 @@ class PersonasController extends ControllerBase
     }
 
     /**
-     * Shows the index action
+     * Muestra la acción del índice.
      */
     public function indexAction()
     {
@@ -53,7 +53,7 @@ class PersonasController extends ControllerBase
     }
 
     /**
-     * Search personas based on current criteria
+     * Buscar personas según los criterios actuales
      */
     public function searchAction()
     {
@@ -100,7 +100,7 @@ class PersonasController extends ControllerBase
     }
 
     /**
-     * Shows the form to create a new personas
+     * Muestra el formulario para crear nuevas personas.
      */
     public function newAction()
     {
@@ -113,7 +113,7 @@ class PersonasController extends ControllerBase
     }
 
     /**
-     * Editar  personas based on its id
+     * Editar  personas basado en su id
      * @param string $id
      * 
      */
@@ -149,7 +149,8 @@ class PersonasController extends ControllerBase
     }
 
     /**
-     * Creates a new personas
+     * 
+     * Crea nuevas personas
      */
     public function createAction()
     {
@@ -195,7 +196,7 @@ class PersonasController extends ControllerBase
     }
 
     /**
-     * Saves current personas in screen
+     * Guarda las personas actuales en la pantalla
      *
      * @param string $personasid
      */

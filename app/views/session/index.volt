@@ -5,12 +5,12 @@
 
     <div class="col-md-6">
         <div class="page-header">
-            <h2>Log In</h2>
+            <h2>Iniciar sesión</h2>
         </div>
         {{ form('session/start', 'role': 'form') }}
             <fieldset>
                 <div class="form-group">
-                    <label for="email">Username/Email</label>
+                    <label for="email">Usuario/Email</label>
                     <div class="controls">
                         {{ text_field('email', 'class': "form-control") }}
                     </div>
@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    {{ submit_button('Login', 'class': 'btn btn-primary btn-large') }}
+                    {{ submit_button('Ingresar', 'class': 'btn btn-primary btn-large') }}
                 </div>
             </fieldset>
         </form>
@@ -31,14 +31,15 @@
     <div class="col-md-6">
 
         <div class="page-header">
-            <h2>Don't have an account yet?</h2>
+            <h2> ¿Aún no tienes una cuenta?</h2>
+               
         </div>
 
-        <p>Create an account offers the following advantages:</p>
+        <p>Crear una cuenta ofrece las siguientes ventajas:</p>
         <ul>
-            <li>Create, track and export your invoices online</li>
-            <li>Gain critical insights into how your business is doing</li>
-            <li>Stay informed about promotions and special packages</li>
+            <li>Cree, rastree y exporte sus facturas en línea</li>
+            <li>Obtenga información crítica sobre cómo le está yendo a su negocio</li>
+            <li>Manténgase informado sobre promociones y paquetes especiales</li>
         </ul>
 
         <div class="clearfix center">
