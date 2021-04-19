@@ -126,16 +126,25 @@ class ClientesForm extends Form
         );
 
         $this->add($celular);
+        
+        $Datotipodocumento = new Tipodocumento;
+        $tipodocumentoSql = $Datotipodocumento->getTipodocumento();        
 
+        foreach ($tipodocumentoSql as $list) {
+            
+            $data = [
+                "id"        => $list['tipodocumentoid'],
+                "nombre"    =>  $list['nombre'],
+            ];
 
+        }
+        
+               //print_r($data);die;   
         $tipodocumento =  new Select(
             'tipodocumento',
-            [
-                '1' => 'CC',
-                '2' => 'NIT',
-                '3' => 'PAS',
-            ]
-            );
+            $data,
+           
+        );
       
 
         $tipodocumento->setLabel("tipodocumento");

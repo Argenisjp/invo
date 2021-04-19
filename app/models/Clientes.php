@@ -42,4 +42,12 @@ class Clientes extends Model
      * @var string
      */
     public $correo;
+
+        // Lista de tipos de documento
+        public function getDatosClientes(){
+          $sql = "SELECT c.*, td.nombre tipodocumento FROM clientes c JOIN tipodocumento td ON td.tipodocumentoid = c.tipodocumentoid";
+          $prepare = $this->getDi()->getShared("db")->prepare($sql);
+          $prepare->execute();
+          return $prepare;
+      }
 }

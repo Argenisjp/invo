@@ -17,39 +17,27 @@ class clientesController extends ControllerBase
      */
     public function indexAction()
     {
-        $this->session->conditions = null;
+        //llamamos al modelo he imprimimos los datos de la consulta
+        $Datosclientes = new Clientes;
+        $DatosclientesSql = $Datosclientes->getDatosClientes();  
 
-        $this->view->form = new clientesForm;
+        foreach ($DatosclientesSql as $list) {
+            
+            $data[] = [
+                "id"                  =>  $list['clienteid'],
+                "nombre"              =>  $list['nombre'],
+                "apellido"            =>  $list['apellido'],
+                "celular"             =>  $list['celular'],
+                "tipodocumento"     =>  $list['tipodocumento'],
+                "documento"           =>  $list['documento'],
+                "correo"              =>  $list['correo'],
+            ];
 
-        $clientes = clientes::find();
-
-        if (count($clientes) == 0) {
-            $this->flash->notice("No hay datos");
         }
 
-        $numberPage = 1;
-        if ($this->request->isPost()) {
-            $query = Criteria::fromInput(
-                $this->di,
-                "Clientes",
-                $this->request->getPost()
-            );
-
-            $this->persistent->searchParams = $query->getParams();
-        } else {
-            $numberPage = $this->request->getQuery("page", "int");
-        }
-
-        $paginator = new Paginator(
-            [
-                "data"  => $clientes,
-                "limit" => 10,
-                "page"  => $numberPage,
-            ]
-        );
-
-        $this->view->page = $paginator->getPaginate();
-        $this->view->clientes = $clientes;
+        $data = json_encode($data);
+        $this->view->clientes = json_decode($data);
+       
     }
 
     /**
@@ -104,6 +92,22 @@ class clientesController extends ControllerBase
      */
     public function newAction()
     {
+
+        $Datotipodocumento = new Tipodocumento;
+        $tipodocumentoSql = $Datotipodocumento->getTipodocumento();        
+
+        foreach ($tipodocumentoSql as $list) {
+            
+            $data[] = [
+                "id"        => $list['tipodocumentoid'],
+                "nombre"    =>  $list['nombre'],
+            ];
+
+        }
+
+        $data = json_encode($data);
+        $this->view->tipodocumento = json_decode($data);
+        
         $this->view->form = new ClientesForm(
             null,
             [
@@ -119,7 +123,21 @@ class clientesController extends ControllerBase
      */
     public function editAction($clienteid)
     {
+        
+        $Datotipodocumento = new Tipodocumento;
+        $tipodocumentoSql = $Datotipodocumento->getTipodocumento();        
 
+        foreach ($tipodocumentoSql as $list) {
+            
+            $data[] = [
+                "id"        => $list['tipodocumentoid'],
+                "nombre"    =>  $list['nombre'],
+            ];
+
+        }
+
+        $data = json_encode($data);
+        $this->view->tipodocumento = json_decode($data);
         
 
         if (!$this->request->isPost()) {
@@ -127,6 +145,8 @@ class clientesController extends ControllerBase
                 "clienteid = :id:" ,
                 'bind' => ['id' => $clienteid]
             ]);
+
+            
 
             if (!$clientes) {
                 $this->flash->error("Error para editar");
@@ -138,13 +158,8 @@ class clientesController extends ControllerBase
                     ]
                 );
             }
-
-            $this->view->form = new ClientesForm(
-                $clientes,
-                [
-                    'edit' => true,
-                ]
-            );
+            
+            $this->view->dataclientes = $clientes;
         }
     }
 
@@ -168,20 +183,17 @@ class clientesController extends ControllerBase
 
         $form = new ClientesForm;
         $clientes = new Clientes();
-        $data = $this->request->getPost();
-/* 
-        print_r($data);die; */
-        
+        $data = $this->request->getPost();            
         
         $clientes->nombre = $data['nombre'];
         $clientes->apellido = $data['apellido'];
         $clientes->celular = $data['celular'];
-        $clientes->tipodocumento = $data['tipodocumento'];
+        $clientes->tipodocumentoid = $data['tipodocumento'];
         $clientes->documento = $data['documento'];
         $clientes->correo = $data['correo'];
-       
+        
         if($clientes->save()){
-            
+     
 
             $form->clear();
     
@@ -223,7 +235,7 @@ class clientesController extends ControllerBase
         ]); 
                 
         if (!$clientes) {
-            $this->flash->error("clientes does not exist");
+            $this->flash->error("clientes no existe");
 
             return $this->dispatcher->forward(
                 [
@@ -240,7 +252,7 @@ class clientesController extends ControllerBase
         $clientes->nombre = $data['nombre'];
         $clientes->apellido = $data['apellido'];
         $clientes->celular = $data['celular'];
-        $clientes->tipodocumento = $data['tipodocumento'];
+        $clientes->tipodocumentoid = $data['tipodocumento'];
         $clientes->documento = $data['documento'];
         $clientes->correo = $data['correo'];
         
@@ -248,7 +260,7 @@ class clientesController extends ControllerBase
 
             $form->clear();
     
-            $this->flash->success("cliente actualizado con exito");
+            $this->flash->success("Cliente actualizado con exito");
     
             return $this->dispatcher->forward(
                 [
@@ -297,7 +309,7 @@ class clientesController extends ControllerBase
             );
         }
 
-        $this->flash->success("cliente Eliminado  con Exito");
+        $this->flash->success("Cliente Eliminado  con Exito");
 
         return $this->dispatcher->forward(
             [

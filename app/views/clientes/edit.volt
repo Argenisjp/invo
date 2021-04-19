@@ -1,34 +1,69 @@
-
-{{ form("clientes/save", 'role': 'form') }}
-
-<ul class="pager">
-    <li class="previous pull-left">
-        {{ link_to("clientes", "&larr; Regresar") }}
-    </li>
-    <li class="pull-right">
-        {{ submit_button("Acualizar", "class": "btn btn-success") }}
-    </li>
-</ul>
-
 {{ content() }}
 
-<h2>Editar Clienete</h2>
-
-<fieldset>
-
-{% for element in form %}
-    {% if is_a(element, 'Phalcon\Forms\Element\Hidden') %}
-{{ element }}
-    {% else %}
-<div class="form-group">
-    {{ element.label(['class': 'control-label']) }}
-    <div class="controls">
-        {{ element }}
-    </div>
+<div class="col-md-12">
+    <hr>
 </div>
-    {% endif %}
-{% endfor %}
 
-</fieldset>
+{% if dataclientes is defined %}
 
-</form>
+<div  class="col-md-12">
+    <form action="{{url('clientes/save')}}" method="POST">        
+        <input type="hidden" name="clienteid" value="{{dataclientes.clienteid}}">
+        <div class="col-md-8">
+            <label for="">Nombres:</label>
+            <input type="text" name="nombre" value="{{dataclientes.nombre}}" required class="form-control">
+        </div>
+
+        <div class="col-md-8">
+            <label for="">Apellidos:</label>
+            <input type="text" name="apellido" value="{{dataclientes.apellido}}" required class="form-control">            
+        </div>   
+
+        <div class="col-md-8">
+            <label for="">Celular:</label>
+            <input type="number" name="celular"  value="{{dataclientes.celular}}"  required  class="form-control">            
+        </div> 
+
+        <div class="col-md-8">            
+            <label for="">Tipo de documento:</label>                      
+            <select name="tipodocumento" required id="tipodocumento" class="form-control">    
+                <option value="">Seleccione...</option>                                 
+                {% for item in tipodocumento %}
+                    <option value="{{item.id}}">{{item.nombre}}</option>
+                {% endfor %}                
+            </select>
+        </div>
+
+        <div class="col-md-8">
+            <label for="">Documento:</label>
+            <input type="number" name="documento" value="{{dataclientes.documento}}" required class="form-control">            
+        </div>  
+
+        <div class="col-md-8">
+            <label for="">Correo:</label>
+            <input type="imail" name="correo" value="{{dataclientes.correo}}"  required class="form-control">            
+        </div>   
+        
+        <div class="col-md-8">
+           <br>
+            <button class="btn btn-success form-control ">Actualizar</button>
+        </div>
+    </form>    
+</div>
+{% else %}
+<div  class="col-md-12">
+    <label for=""> la data no existe </label>
+</div>
+{% endif %}
+<div class="col-md-12">
+    <hr>
+</div>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+{% if dataclientes is defined %}
+	<script>
+        var tipodocumento = '{{dataclientes.tipodocumentoid}}';        
+		$('#tipodocumento').val(tipodocumento);
+	</script>
+{% endif %}
+
