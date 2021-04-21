@@ -7,6 +7,9 @@
 <div style="margin-left: 20%;" class="col-md-12">
     <form action="{{url('proveedores/create')}}" method="POST">        
         <div class="col-md-8">
+            <input type="hidden" name="proveedorid" required class="form-control">
+        </div>
+        <div class="col-md-8">
             <label for="">Nombres:</label>
             <input type="text" name="nombre" required class="form-control">
         </div>
@@ -18,7 +21,7 @@
 
         <div class="col-md-8">            
             <label for="">Tipo de documento:</label>                      
-            <select name="tipodocumento" required id="establecimiento" class="form-control chosen">    
+            <select name="tipodocumentoid" required id="establecimiento" class="form-control chosen">    
                 <option value="">Seleccione...</option>                                 
                 {% for item in tipodocumento %}
                     <option value="{{item.id}}">{{item.nombre}}</option>
@@ -30,13 +33,13 @@
             <label for="">Documento:</label>
             <input type="number" name="documento" required class="form-control">            
         </div>  
-        <div class="col-md-8">
+    <!--     <div class="col-md-8">
             <label for="">Fecha de afiliación:</label>
             <input type="date" name="fechaafiliacion" required class="form-control">            
-        </div> 
+        </div>  -->
         <div class="col-md-8">            
             <label for="">Tipo de contrato:</label>                      
-            <select name="tipocontrato" required id="establecimiento" class="form-control chosen">    
+            <select name="tipocontratoid" required id="tipocontrato" class="form-control chosen">    
                 <option value="">Seleccione...</option>                                 
                 {% for item in tipocontrato %}
                     <option value="{{item.id}}">{{item.nombre}}</option>
@@ -46,11 +49,12 @@
 
         <div class="col-md-8">            
             <label for="">Status:</label>                      
-            <select name="tipodocumento" required id="establecimiento" class="form-control chosen">    
+            <select name="status" required id="status" class="form-control chosen">    
                 <option value="">Seleccione...</option>                                 
-                {% for item in tipocontrato %}
-                    <option value="{{item.id}}">{{item.nombre}}</option>
-                {% endfor %}                
+                
+                    <option value="1">Activo</option>
+                    <option value="2">Inactivo</option>
+                                
             </select>
         </div>   
         

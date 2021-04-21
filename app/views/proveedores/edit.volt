@@ -4,25 +4,21 @@
     <hr>
 </div>
 
-{% if dataclientes is defined %}
+{% if dataproveedores is defined %}
 
 <div  class="col-md-12">
-    <form action="{{url('clientes/save')}}" method="POST">        
-        <input type="hidden" name="clienteid" value="{{dataclientes.clienteid}}">
+    <form action="{{url('proveedores/save')}}" method="POST">        
+        <input type="hidden" name="proveedorid" value="{{dataproveedores.proveedorid}}">
         <div class="col-md-8">
+
             <label for="">Nombres:</label>
-            <input type="text" name="nombre" value="{{dataclientes.nombre}}" required class="form-control">
+            <input type="text" name="nombre" value="{{dataproveedores.nombre}}" required class="form-control">
         </div>
 
         <div class="col-md-8">
             <label for="">Apellidos:</label>
-            <input type="text" name="apellido" value="{{dataclientes.apellido}}" required class="form-control">            
+            <input type="text" name="apellido" value="{{dataproveedores.apellido}}" required class="form-control">            
         </div>   
-
-        <div class="col-md-8">
-            <label for="">Celular:</label>
-            <input type="number" name="celular"  value="{{dataclientes.celular}}"  required  class="form-control">            
-        </div> 
 
         <div class="col-md-8">            
             <label for="">Tipo de documento:</label>                      
@@ -36,13 +32,30 @@
 
         <div class="col-md-8">
             <label for="">Documento:</label>
-            <input type="number" name="documento" value="{{dataclientes.documento}}" required class="form-control">            
-        </div>  
+            <input type="number" name="documento" value="{{dataproveedores.documento}}" required class="form-control">            
+        </div> 
 
-        <div class="col-md-8">
-            <label for="">Correo:</label>
-            <input type="imail" name="correo" value="{{dataclientes.correo}}"  required class="form-control">            
-        </div>   
+         
+
+        <div class="col-md-8">            
+            <label for="">Tipo de contrato:</label>                      
+            <select name="tipocontrato" required id="tipocontrato" class="form-control">    
+                <option value="">Seleccione...</option>                                 
+                {% for item in tipocontrato %}
+                    <option value="{{item.id}}">{{item.nombre}}</option>
+                {% endfor %}                
+            </select>
+        </div>
+        <div class="col-md-8">            
+            <label for="">Status:</label>                      
+            <select name="status" required id="status" class="form-control">    
+                <option value="">Seleccione...</option>                                 
+                <option value="1">Activo</option>                                 
+                <option value="2">Inactivo</option>                                 
+            </select>
+        </div>
+
+        
         
         <div class="col-md-8">
            <br>
@@ -59,11 +72,17 @@
     <hr>
 </div>
 
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-{% if dataclientes is defined %}
+<!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script> -->
+{% if dataproveedores is defined %}
 	<script>
-        var tipodocumento = '{{dataclientes.tipodocumentoid}}';        
+        var tipodocumento = '{{dataproveedores.tipodocumentoid}}';        
 		$('#tipodocumento').val(tipodocumento);
+     
+        var tipocontrato = '{{dataproveedores.tipocontratoid}}';        
+		$('#tipocontrato').val(tipocontrato);
+      
+        var status = '{{dataproveedores.status}}';        
+		$('#status').val(status);
 	</script>
 {% endif %}
 

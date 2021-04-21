@@ -25,14 +25,14 @@
     <tbody>
         {% for item in proveedores %}
         <tr>
-            <th scope="row">{item.proveedorid }}</th>
-            <td>{item.nombre }}</td>
-            <td>{item.apellido }}</td>
-            <td>{item.tipodocumentoid}}</td>
-            <td>{item.documento}}</td>
-            <td>{item.fechaafiliacion}}</td>
-            <td>{item.tipocontratoid }}</td>
-            <td>{item.status}}</td>
+            <th scope="row">{{item.id}}</th>
+            <td>{{item.nombre}}</td>
+            <td>{{item.apellido}}</td>
+            <td>{{item.tipodocumento}}</td>
+            <td>{{item.documento}}</td>
+            <td>{{item.fechaafiliacion}}</td>
+            <td>{{item.tipocontratoid}}</td>
+            <td>{% if item.status == 1 %} ACTIVO {% else %} INACTIVO {% endif %}</td>
            
             <td width="7%">{{ link_to("proveedores/edit/" ~ item.id, '<i class=" glyphicon glyphicon-edit"></i> Editar', "class": "btn btn-info") }}</td>
             <td width="7%">{{ link_to("proveedores/delete/" ~ item.id, '<i class=" glyphicon glyphicon-remove"></i> Eliminar', "class": "btn btn-danger") }}</td>
@@ -42,5 +42,5 @@
   </table>
 
   {% else %}
-    No se encontraron registros de clientes
+    No se encontraron registros de Proveedores
 {% endif %}

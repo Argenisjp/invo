@@ -3,7 +3,7 @@
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 
-class proveedorController extends ControllerBase
+class proveedoresController extends ControllerBase
 {
     public function initialize()
     {
@@ -19,29 +19,31 @@ class proveedorController extends ControllerBase
     {
         //llamamos al modelo he imprimimos los datos de la consulta
         $Datosproveedores = new Proveedores;
-        $DatosproveedoresSql = $Datosproveedores->getDatosProveedor();  
-
+        $DatosproveedoresSql = $Datosproveedores->getDatosProveedores();  
+         
         foreach ($DatosproveedoresSql as $list) {
-            
+          
             $data[] = [
                 "id"                  =>  $list['proveedorid'],
                 "nombre"              =>  $list['nombre'],
                 "apellido"            =>  $list['apellido'],
                 "tipodocumento"       =>  $list['tipodocumento'],
+                "documento"           =>  $list['documento'],
                 "fechaafiliacion"     =>  $list['fechaafiliacion'],
-                "tipocontrato"        =>  $list['tipocontrato'],
+                "tipocontratoid"      =>  $list['tipocontrato'],
                 "status"              =>  $list['status'],
             ];
-
+           /*  print_r($data);die; */
         }
-
+        
         $data = json_encode($data);
         $this->view->proveedores = json_decode($data);
+       
        
     }
 
     /**
-     * Buscar Proveedor según los criterios actuales
+     * Buscar al Proveedor según los criterios actuales
      */
     public function searchAction()
     {
@@ -92,28 +94,54 @@ class proveedorController extends ControllerBase
      */
     public function newAction()
     {
-
+        //consulta para traer los tipos de documentos desde base
         $Datotipodocumento = new Tipodocumento;
         $tipodocumentoSql = $Datotipodocumento->getTipodocumento();        
 
+        //recorre con un foreach la consulta de tipo de documento
         foreach ($tipodocumentoSql as $list) {
             
-            $data[] = [
+            $datatipodocumento[] = [
                 "id"        => $list['tipodocumentoid'],
                 "nombre"    =>  $list['nombre'],
             ];
 
         }
 
-        $data = json_encode($data);
-        $this->view->tipodocumento = json_decode($data);
+        //codificar la datatipodocumento que bota el foreach
+        $datatipodocumento = json_encode($datatipodocumento);
+        //decodificar la datatipodocumento que bota el foreach y enviar los datos a la vista con la variable tipodocumento
+        $this->view->tipodocumento = json_decode($datatipodocumento);
         
+        //consulta para traer los tipos de contratos desde base
+        $Datotipocontrato = new Tipocontrato;
+        $tipocontratoSql = $Datotipocontrato->getTipocontrato();        
+
+        foreach ($tipocontratoSql as $list) {
+            
+            $datacontrato[] = [
+                "id"        =>  $list['tipocontratoid'],
+                "nombre"    =>  $list['nombre'],
+            ];
+
+        }
+
+        $datacontrato = json_encode($datacontrato);
+        $this->view->tipocontrato = json_decode($datacontrato);
+        
+
         $this->view->form = new ProveedoresForm(
             null,
             [
                 'edit' => true,
             ]
         );
+
+
+      /*  
+ */
+
+     
     }
 
     /**
@@ -123,25 +151,41 @@ class proveedorController extends ControllerBase
      */
     public function editAction($proveedorid)
     {
-        
-        $Datotipodocumento = new Tipodocumento;
-        $tipodocumentoSql = $Datotipodocumento->getDatosProveedores();        
-
+       
+        $Datotipodocumento = new Tipodocumento;        
+        $tipodocumentoSql = $Datotipodocumento->getTipodocumento();              
+   
         foreach ($tipodocumentoSql as $list) {
             
             $data[] = [
                 "id"        => $list['tipodocumentoid'],
                 "nombre"    =>  $list['nombre'],
             ];
+            
 
         }
-
+      
         $data = json_encode($data);
         $this->view->tipodocumento = json_decode($data);
-        
+     
+     
+        $Datotipocontrato = new Tipocontrato;        
+        $tipocontratoSql = $Datotipocontrato->getTipocontrato();              
+        foreach ($tipocontratoSql as $list) {
+            
+            $datatipocontrato[] = [
+                "id"        => $list['tipocontratoid'],
+                "nombre"    =>  $list['nombre'],
+            ];
+     
+
+        }
+      
+        $datatipocontrato = json_encode($datatipocontrato);
+        $this->view->tipocontrato = json_decode($datatipocontrato);
 
         if (!$this->request->isPost()) {
-            $proveedores = Proveedores::findFirst([
+            $proveedores = proveedores::findFirst([
                 "proveedorid = :id:" ,
                 'bind' => ['id' => $proveedorid]
             ]);
@@ -181,23 +225,23 @@ class proveedorController extends ControllerBase
             );
         }
 
-        $form = new ProvedoresForm;
+        //$form = new ProvedoresForm;
         $proveedores = new Proveedores();
         $data = $this->request->getPost();            
         
         $proveedores->nombre            = $data['nombre'];
         $proveedores->apellido          = $data['apellido'];
-        $proveedores->tipodocumentoid   = $data['tipodocumento'];
+        $proveedores->tipodocumentoid   = $data['tipodocumentoid'];
         $proveedores->documento         = $data['documento'];
-        $proveedores->fechaafiliacion   = $data['fechaafiliacion'];
-        $proveedores->tipocontrato      = $data['tipocontrato'];
+        /* $proveedores->fechaafiliacion   = $data['fechaafiliacion']; */
+        $proveedores->tipocontratoid    = $data['tipocontratoid'];
         $proveedores->status            = $data['status'];
         
         if($proveedores->save()){
      
 
-            $form->clear();
-    
+            //$form->clear();
+
             $this->flash->success("proveedor Creado con exito");
     
             return $this->dispatcher->forward(
@@ -207,6 +251,8 @@ class proveedorController extends ControllerBase
                 ]
             );
 
+        }else{
+            print_r('no registro');die;
         }
       
     }
@@ -217,7 +263,8 @@ class proveedorController extends ControllerBase
      * @param string $proveedorid
      */
     public function saveAction()
-    {
+    {        
+
         if (!$this->request->isPost()) {
             return $this->dispatcher->forward(
                 [
@@ -229,7 +276,7 @@ class proveedorController extends ControllerBase
 
         $id = $this->request->getPost("proveedorid", "int");
         
-        //verificar si el id de la cliente existe
+        //verificar si el id de la proveedor existe
         $proveedores =  Proveedores::findFirst([
             "conditions" => "proveedorid = ?1",
             "bind" => array(1 =>  $id)
@@ -250,12 +297,14 @@ class proveedorController extends ControllerBase
 
         $data = $this->request->getPost();        
         
+        $horaactual = date("Y-m-d H:m:s");        
+
         $proveedores->nombre            = $data['nombre'];
         $proveedores->apellido          = $data['apellido'];
         $proveedores->tipodocumentoid   = $data['tipodocumento'];
         $proveedores->documento         = $data['documento'];
-        $proveedores->fechaafiliacion   = $data['fechaafiliacion'];
-        $proveedores->tipocontrato      = $data['tipocontrato'];
+        $proveedores->fechamodificacion = $horaactual;
+        $proveedores->tipocontratoid    = $data['tipocontrato'];
         $proveedores->status            = $data['status'];
         
         if($proveedores->save()){
@@ -280,13 +329,13 @@ class proveedorController extends ControllerBase
      *
      * @param string $id
      */
-    public function deleteAction($provedorid)
+    public function deleteAction($proveedorid)
     {
-        $proveedores = proveedores::findFirst([
-            "provedorid = :id:" ,
-            'bind' => ['id' => $provedorid]
+        $proveedores = Proveedores::findFirst([
+            "proveedorid = :id:" ,
+            'bind' => ['id' => $proveedorid]
         ]);       
-
+           
         if (!$proveedores) {
             $this->flash->error("Error al tratar eliminar a este proveedor ");
 
@@ -296,13 +345,13 @@ class proveedorController extends ControllerBase
                     "action"     => "index",
                 ]
             );
-        }
+        } 
 
         if (!$proveedores->delete()) {
             foreach ($proveedores->getMessages() as $message) {
                 $this->flash->error($message);
             }
-
+           
             return $this->dispatcher->forward(
                 [
                     "controller" => "proveedores",
@@ -310,6 +359,8 @@ class proveedorController extends ControllerBase
                 ]
             );
         }
+            
+        
 
         $this->flash->success("Proveedor Eliminado  con Exito");
 

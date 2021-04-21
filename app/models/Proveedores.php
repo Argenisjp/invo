@@ -22,7 +22,7 @@ class Proveedores extends Model
     /**
      * @var integer
      */
-    public $tipodocumentoid;
+    public $tipodocumento;
 
     /**
      * @var integer
@@ -35,11 +35,11 @@ class Proveedores extends Model
     public $fechaafiliacion;
 
       /**
-     * @var string
+     * @var integer
      */
     public $tipocontrato;
       /**
-     * @var string
+     * @var integer
      */
     public $status;
 
@@ -47,7 +47,7 @@ class Proveedores extends Model
 
         // Lista de tipos de documento
         public function getDatosProveedores(){
-          $sql = "SELECT c.*, td.nombre tipodocumento FROM proveedores  c JOIN tipodocumento td ON td.tipodocumentoid = c.tipodocumentoid";
+          $sql = "SELECT c.*, tc.nombre as tipocontrato, td.nombre as tipodocumento FROM proveedores c JOIN tipocontrato as tc ON tc.tipocontratoid = c.tipocontratoid JOIN tipodocumento as td ON td.tipodocumentoid = c.tipodocumentoid";
           $prepare = $this->getDi()->getShared("db")->prepare($sql);
           $prepare->execute();
           return $prepare;
