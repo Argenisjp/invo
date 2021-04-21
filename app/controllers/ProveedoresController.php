@@ -125,7 +125,7 @@ class proveedorController extends ControllerBase
     {
         
         $Datotipodocumento = new Tipodocumento;
-        $tipodocumentoSql = $Datotipodocumento->getTipodocumento();        
+        $tipodocumentoSql = $Datotipodocumento->getDatosProveedores();        
 
         foreach ($tipodocumentoSql as $list) {
             
@@ -221,7 +221,7 @@ class proveedorController extends ControllerBase
         if (!$this->request->isPost()) {
             return $this->dispatcher->forward(
                 [
-                    "clienteid = :id:" ,
+                    "proveedorid = :id:" ,
                     'bind' => ['id' => $proveedorid]
                 ]
             );
@@ -280,11 +280,11 @@ class proveedorController extends ControllerBase
      *
      * @param string $id
      */
-    public function deleteAction($clienteid)
+    public function deleteAction($provedorid)
     {
         $proveedores = proveedores::findFirst([
-            "clienteid = :id:" ,
-            'bind' => ['id' => $clienteid]
+            "provedorid = :id:" ,
+            'bind' => ['id' => $provedorid]
         ]);       
 
         if (!$proveedores) {
