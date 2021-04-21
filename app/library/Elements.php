@@ -23,6 +23,10 @@ class Elements extends Component
                 'caption' => 'Clientes',
                 'action' => 'index'
             ],
+            'proveedores' => [
+                'caption' => 'Proveedores',
+                'action' => 'index'
+            ],
             'about' => [
                 'caption' => 'About',
                 'action' => 'index'
@@ -48,6 +52,11 @@ class Elements extends Component
         ],
         'Clientes' => [
             'controller' => 'clientes',
+            'action' => 'index',
+            'any' => false
+        ],
+        'Proveedores' => [
+            'controller' => 'proveedores',
             'action' => 'index',
             'any' => false
         ],

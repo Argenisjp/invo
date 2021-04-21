@@ -17,7 +17,7 @@
             <th>Nombres</th>
             <th>Apellidos</th>
             <th>Fecha Nacimiento</th>
-            <th>Eda</th>
+            <th>Edad</th>
             <th>Fecha Registro</th>
             <th>Salario</th>
             <th>Status</th>

@@ -1,0 +1,46 @@
+
+
+{{ content() }}
+
+<div align="right">
+    {{ link_to("proveedores/new", "Agregar proveedor", "class": "btn btn-primary") }}
+</div>
+
+{% if proveedores is defined %}
+<table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">Tipo de documento</th>
+        <th scope="col">Documento</th>
+        <th scope="col">Fecha de afiliación</th>
+        <th scope="col">Tipo de contrato</th>
+        <th scope="col">Status</th>
+        <th scope="col">Editar</th>
+        <th scope="col">Eliminar</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for item in proveedores %}
+        <tr>
+            <th scope="row">{item.proveedorid }}</th>
+            <td>{item.nombre }}</td>
+            <td>{item.apellido }}</td>
+            <td>{item.tipodocumentoid}}</td>
+            <td>{item.documento}}</td>
+            <td>{item.fechaafiliacion}}</td>
+            <td>{item.tipocontratoid }}</td>
+            <td>{item.status}}</td>
+           
+            <td width="7%">{{ link_to("proveedores/edit/" ~ item.id, '<i class=" glyphicon glyphicon-edit"></i> Editar', "class": "btn btn-info") }}</td>
+            <td width="7%">{{ link_to("proveedores/delete/" ~ item.id, '<i class=" glyphicon glyphicon-remove"></i> Eliminar', "class": "btn btn-danger") }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+
+  {% else %}
+    No se encontraron registros de clientes
+{% endif %}

@@ -3,11 +3,11 @@
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 
-class clientesController extends ControllerBase
+class proveedorController extends ControllerBase
 {
     public function initialize()
     {
-        $this->tag->setTitle('Manage your clientes');
+        $this->tag->setTitle('Manage your proveedor');
 
         parent::initialize();
     }
@@ -18,30 +18,30 @@ class clientesController extends ControllerBase
     public function indexAction()
     {
         //llamamos al modelo he imprimimos los datos de la consulta
-        $Datosclientes = new Clientes;
-        $DatosclientesSql = $Datosclientes->getDatosClientes();  
+        $Datosproveedores = new Proveedores;
+        $DatosproveedoresSql = $Datosproveedores->getDatosProveedor();  
 
-        foreach ($DatosclientesSql as $list) {
+        foreach ($DatosproveedoresSql as $list) {
             
             $data[] = [
-                "id"                  =>  $list['clienteid'],
+                "id"                  =>  $list['proveedorid'],
                 "nombre"              =>  $list['nombre'],
                 "apellido"            =>  $list['apellido'],
-                "celular"             =>  $list['celular'],
                 "tipodocumento"       =>  $list['tipodocumento'],
-                "documento"           =>  $list['documento'],
-                "correo"              =>  $list['correo'],
+                "fechaafiliacion"     =>  $list['fechaafiliacion'],
+                "tipocontrato"        =>  $list['tipocontrato'],
+                "status"              =>  $list['status'],
             ];
 
         }
 
         $data = json_encode($data);
-        $this->view->clientes = json_decode($data);
+        $this->view->proveedores = json_decode($data);
        
     }
 
     /**
-     * Buscar clientes según los criterios actuales
+     * Buscar Proveedor según los criterios actuales
      */
     public function searchAction()
     {
@@ -49,7 +49,7 @@ class clientesController extends ControllerBase
         if ($this->request->isPost()) {
             $query = Criteria::fromInput(
                 $this->di,
-                "Clientes",
+                "Proveedores",
                 $this->request->getPost()
             );
 
@@ -63,13 +63,13 @@ class clientesController extends ControllerBase
             $parameters = $this->persistent->searchParams;
         }
 
-        $clientes = Clientes::find($parameters);
-        if (count($clientes) == 0) {
-            $this->flash->notice("The search did not find any clientes");
+        $proveedores = Proveedores::find($parameters);
+        if (count($proveedores) == 0) {
+            $this->flash->notice("The search did not find any proveedores");
 
             return $this->dispatcher->forward(
                 [
-                    "controller" => "clientes",
+                    "controller" => "proveedores",
                     "action"     => "index",
                 ]
             );
@@ -77,18 +77,18 @@ class clientesController extends ControllerBase
 
         $paginator = new Paginator(
             [
-                "data"  => $clientes,
+                "data"  => $proveedores,
                 "limit" => 10,
                 "page"  => $numberPage,
             ]
         );
 
         $this->view->page = $paginator->getPaginate();
-        $this->view->clientes = $clientes;
+        $this->view->proveedores = $proveedores;
     }
 
     /**
-     * Muestra el formulario para crear nuevos clientes.
+     * Muestra el formulario para crear nuevos proveedores.
      */
     public function newAction()
     {
@@ -108,7 +108,7 @@ class clientesController extends ControllerBase
         $data = json_encode($data);
         $this->view->tipodocumento = json_decode($data);
         
-        $this->view->form = new ClientesForm(
+        $this->view->form = new ProveedoresForm(
             null,
             [
                 'edit' => true,
@@ -117,11 +117,11 @@ class clientesController extends ControllerBase
     }
 
     /**
-     * Editar  clientes basado en su id
+     * Editar  proveedores basado en su id
      * @param string $id
      * 
      */
-    public function editAction($clienteid)
+    public function editAction($proveedorid)
     {
         
         $Datotipodocumento = new Tipodocumento;
@@ -141,30 +141,30 @@ class clientesController extends ControllerBase
         
 
         if (!$this->request->isPost()) {
-            $clientes = clientes::findFirst([
-                "clienteid = :id:" ,
-                'bind' => ['id' => $clienteid]
+            $proveedores = Proveedores::findFirst([
+                "proveedorid = :id:" ,
+                'bind' => ['id' => $proveedorid]
             ]);
 
             
 
-            if (!$clientes) {
+            if (!$proveedores) {
                 $this->flash->error("Error para editar");
 
                 return $this->dispatcher->forward(
                     [
-                        "controller" => "clientes",
+                        "controller" => "proveedores",
                         "action"     => "index",
                     ]
                 );
             }
             
-            $this->view->dataclientes = $clientes;
+            $this->view->dataproveedores = $proveedores;
         }
     }
 
     /**
-     * Accion para Crear un nuevo cliente
+     * Accion para Crear un nuevo proveedor
      */
     public function createAction()
     {
@@ -175,33 +175,34 @@ class clientesController extends ControllerBase
             
             return $this->dispatcher->forward(
                 [
-                    "controller" => "clientes",
+                    "controller" => "proveedores",
                     "action"     => "index",
                 ]
             );
         }
 
-        $form = new ClientesForm;
-        $clientes = new Clientes();
+        $form = new ProvedoresForm;
+        $proveedores = new Proveedores();
         $data = $this->request->getPost();            
         
-        $clientes->nombre = $data['nombre'];
-        $clientes->apellido = $data['apellido'];
-        $clientes->celular = $data['celular'];
-        $clientes->tipodocumentoid = $data['tipodocumento'];
-        $clientes->documento = $data['documento'];
-        $clientes->correo = $data['correo'];
+        $proveedores->nombre            = $data['nombre'];
+        $proveedores->apellido          = $data['apellido'];
+        $proveedores->tipodocumentoid   = $data['tipodocumento'];
+        $proveedores->documento         = $data['documento'];
+        $proveedores->fechaafiliacion   = $data['fechaafiliacion'];
+        $proveedores->tipocontrato      = $data['tipocontrato'];
+        $proveedores->status            = $data['status'];
         
-        if($clientes->save()){
+        if($proveedores->save()){
      
 
             $form->clear();
     
-            $this->flash->success("cliente Creado con exito");
+            $this->flash->success("proveedor Creado con exito");
     
             return $this->dispatcher->forward(
                 [
-                    "controller" => "clientes",
+                    "controller" => "proveedores",
                     "action"     => "index",
                 ]
             );
@@ -211,9 +212,9 @@ class clientesController extends ControllerBase
     }
 
     /**
-     * Guarda a los clientes actuales en la pantalla
+     * Guarda a los proveedores actuales en la pantalla
      *
-     * @param string $clienteid
+     * @param string $proveedorid
      */
     public function saveAction()
     {
@@ -221,50 +222,51 @@ class clientesController extends ControllerBase
             return $this->dispatcher->forward(
                 [
                     "clienteid = :id:" ,
-                    'bind' => ['id' => $clienteid]
+                    'bind' => ['id' => $proveedorid]
                 ]
             );
         }
 
-        $id = $this->request->getPost("clienteid", "int");
+        $id = $this->request->getPost("proveedorid", "int");
         
         //verificar si el id de la cliente existe
-        $clientes =  Clientes::findFirst([
-            "conditions" => "clienteid = ?1",
+        $proveedores =  Proveedores::findFirst([
+            "conditions" => "proveedorid = ?1",
             "bind" => array(1 =>  $id)
         ]); 
                 
-        if (!$clientes) {
-            $this->flash->error("clientes no existe");
+        if (!$proveedores) {
+            $this->flash->error("proveedores no existe");
 
             return $this->dispatcher->forward(
                 [
-                    "controller" => "clientes",
+                    "controller" => "proveedores",
                     "action"     => "index",
                 ]
             );
         }
 
-        $form = new ClientesForm;
+        $form = new ProveedoresForm;
 
         $data = $this->request->getPost();        
         
-        $clientes->nombre = $data['nombre'];
-        $clientes->apellido = $data['apellido'];
-        $clientes->celular = $data['celular'];
-        $clientes->tipodocumentoid = $data['tipodocumento'];
-        $clientes->documento = $data['documento'];
-        $clientes->correo = $data['correo'];
+        $proveedores->nombre            = $data['nombre'];
+        $proveedores->apellido          = $data['apellido'];
+        $proveedores->tipodocumentoid   = $data['tipodocumento'];
+        $proveedores->documento         = $data['documento'];
+        $proveedores->fechaafiliacion   = $data['fechaafiliacion'];
+        $proveedores->tipocontrato      = $data['tipocontrato'];
+        $proveedores->status            = $data['status'];
         
-        if($clientes->save()){
+        if($proveedores->save()){
 
             $form->clear();
     
-            $this->flash->success("Cliente actualizado con exito");
+            $this->flash->success("Proveedores actualizado con exito");
     
             return $this->dispatcher->forward(
                 [
-                    "controller" => "clientes",
+                    "controller" => "proveedores",
                     "action"     => "index",
                 ]
             );
@@ -274,46 +276,46 @@ class clientesController extends ControllerBase
     }
 
     /**
-     * Eliminar clientes
+     * Eliminar proveedores
      *
      * @param string $id
      */
     public function deleteAction($clienteid)
     {
-        $clientes = clientes::findFirst([
+        $proveedores = proveedores::findFirst([
             "clienteid = :id:" ,
             'bind' => ['id' => $clienteid]
         ]);       
 
-        if (!$clientes) {
-            $this->flash->error("Error al tratar eliminar a esta persona ");
+        if (!$proveedores) {
+            $this->flash->error("Error al tratar eliminar a este proveedor ");
 
             return $this->dispatcher->forward(
                 [
-                    "controller" => "clientes",
+                    "controller" => "proveedores",
                     "action"     => "index",
                 ]
             );
         }
 
-        if (!$clientes->delete()) {
-            foreach ($clientes->getMessages() as $message) {
+        if (!$proveedores->delete()) {
+            foreach ($proveedores->getMessages() as $message) {
                 $this->flash->error($message);
             }
 
             return $this->dispatcher->forward(
                 [
-                    "controller" => "clientes",
+                    "controller" => "proveedores",
                     "action"     => "search",
                 ]
             );
         }
 
-        $this->flash->success("Cliente Eliminado  con Exito");
+        $this->flash->success("Proveedor Eliminado  con Exito");
 
         return $this->dispatcher->forward(
             [
-                "controller" => "clientes",
+                "controller" => "proveedores",
                 "action"     => "index",
             ]
         );
