@@ -123,10 +123,12 @@ class PersonasController extends ControllerBase
         
 
         if (!$this->request->isPost()) {
-            $personas = Personas::findFirst([
+            $personas = personas::findFirst([
                 "personasid = :id:" ,
                 'bind' => ['id' => $personasid]
             ]);
+
+            
 
             if (!$personas) {
                 $this->flash->error("Error para editar");
@@ -138,13 +140,8 @@ class PersonasController extends ControllerBase
                     ]
                 );
             }
-
-            $this->view->form = new PersonasForm(
-                $personas,
-                [
-                    'edit' => true,
-                ]
-            );
+            
+            $this->view->datapersonas = $personas;
         }
     }
 
@@ -155,9 +152,10 @@ class PersonasController extends ControllerBase
     public function createAction()
     {
       
-        
+       
         if (!$this->request->isPost()) {
            
+            
             return $this->dispatcher->forward(
                 [
                     "controller" => "personas",
@@ -166,23 +164,20 @@ class PersonasController extends ControllerBase
             );
         }
 
-        $form = new PersonasForm;
         $personas = new Personas();
+        $data = $this->request->getPost();            
+                
+        $createdSql = $personas->createPersona($data['nombre'], $data['apellido'], $data['fechanacimiento'], $data['edad'], $data['salario'], $data['status']);
+        $response = $createdSql->fetch(PDO::FETCH_ASSOC);
+        $createdSql->closeCursor(); // Cerrar procedimiento almacenado
 
-        $data = $this->request->getPost();
         
-        $personas->nombres = $data['nombres'];
-        $personas->apellidos = $data['apellidos'];
-        $personas->fechanacimiento = $data['fechanacimiento'];
-        $personas->edad = $data['edad'];
-        $personas->salario = $data['salario'];
-        $personas->status = $data['status'];
-        
-        if($personas->save()){
+        if($response['code'] == 200){
+     
 
-            $form->clear();
-    
-            $this->flash->success("personas Creada con exito");
+           // $form->clear();
+
+            $this->flash->success("persona Creado con exito");
     
             return $this->dispatcher->forward(
                 [
@@ -191,6 +186,8 @@ class PersonasController extends ControllerBase
                 ]
             );
 
+        }else{
+            print_r('no registro');die;
         }
       
     }
@@ -220,7 +217,7 @@ class PersonasController extends ControllerBase
         ]); 
                 
         if (!$personas) {
-            $this->flash->error("Personas does not exist");
+            $this->flash->error("Personas no exist");
 
             return $this->dispatcher->forward(
                 [
@@ -230,22 +227,23 @@ class PersonasController extends ControllerBase
             );
         }
 
+      
         $form = new PersonasForm;
+        $data = $this->request->getPost();  
+        
+        $updateSql = $personas->actualizarPersona($data['personasid'],$data['nombre'], $data['apellido'], $data['fechanacimiento'], $data['edad'], $data['salario'], $data['status']);
+        $response = $updateSql->fetch(PDO::FETCH_ASSOC);
+        $updateSql->closeCursor(); // Cerrar procedimiento almacenado
+ 
+       // $form = new ProveedoresForm;
 
-        $data = $this->request->getPost();        
+       
         
-        $personas->nombres = $data['nombres'];
-        $personas->apellidos = $data['apellidos'];
-        $personas->fechanacimiento = $data['fechanacimiento'];
-        $personas->edad = $data['edad'];
-        $personas->salario = $data['salario'];
-        $personas->status = $data['status'];
-        
-        if($personas->save()){
+        if($response['code'] == 200){
 
             $form->clear();
     
-            $this->flash->success("persona actualizada con exito");
+            $this->flash->success("Persona actualizado con exito");
     
             return $this->dispatcher->forward(
                 [
@@ -265,36 +263,19 @@ class PersonasController extends ControllerBase
      */
     public function deleteAction($personasid)
     {
-        $personas = Personas::findFirst([
-            "personasid = :id:" ,
-            'bind' => ['id' => $personasid]
-        ]);       
 
-        if (!$personas) {
-            $this->flash->error("Error al tratar eliminar a esta persona ");
+         //llamamos al modelo personas
+         $personas = new Personas();
+         $data = $this->request->getPost();  
+         $deleteSql = $personas->inactivarPersona($personasid);
+         $response = $deleteSql->fetch(PDO::FETCH_ASSOC);
+         $deleteSql->closeCursor(); // Cerrar procedimiento almacenado
+       
+     
+            
+        
 
-            return $this->dispatcher->forward(
-                [
-                    "controller" => "personas",
-                    "action"     => "index",
-                ]
-            );
-        }
-
-        if (!$personas->delete()) {
-            foreach ($personas->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-
-            return $this->dispatcher->forward(
-                [
-                    "controller" => "personas",
-                    "action"     => "search",
-                ]
-            );
-        }
-
-        $this->flash->success("Personas Eliminada con Exito");
+        $this->flash->success("Persona Inactivada con Exito");
 
         return $this->dispatcher->forward(
             [

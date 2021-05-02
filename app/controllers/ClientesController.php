@@ -31,6 +31,7 @@ class clientesController extends ControllerBase
                 "tipodocumento"       =>  $list['tipodocumento'],
                 "documento"           =>  $list['documento'],
                 "correo"              =>  $list['correo'],
+                "saldo"              =>  $list['saldo'],
             ];
 
         }
@@ -181,23 +182,20 @@ class clientesController extends ControllerBase
             );
         }
 
-        $form = new ClientesForm;
         $clientes = new Clientes();
         $data = $this->request->getPost();            
-        
-        $clientes->nombre = $data['nombre'];
-        $clientes->apellido = $data['apellido'];
-        $clientes->celular = $data['celular'];
-        $clientes->tipodocumentoid = $data['tipodocumento'];
-        $clientes->documento = $data['documento'];
-        $clientes->correo = $data['correo'];
-        
-        if($clientes->save()){
+                
+        $createdSql = $clientes->createCliente($data['nombre'], $data['apellido'], $data['celular'], $data['tipodocumento'], $data['documento'], $data['correo'], $data['saldo']);
+        $response = $createdSql->fetch(PDO::FETCH_ASSOC);
+        $createdSql->closeCursor(); // Cerrar procedimiento almacenado
+      /*   print_r($response);die; */
+       
+        if($response['code'] == 200){
      
 
-            $form->clear();
-    
-            $this->flash->success("cliente Creado con exito");
+      
+
+            $this->flash->success("clientes Creado con exito");
     
             return $this->dispatcher->forward(
                 [
@@ -206,6 +204,8 @@ class clientesController extends ControllerBase
                 ]
             );
 
+        }else{
+            print_r('no registro');die;
         }
       
     }
@@ -246,17 +246,15 @@ class clientesController extends ControllerBase
         }
 
         $form = new ClientesForm;
+        $data = $this->request->getPost();  
 
-        $data = $this->request->getPost();        
+        $updateSql = $clientes->actualizarCliente($data['clienteid'],$data['nombre'], $data['apellido'], $data['celular'], $data['tipodocumento'], $data['documento'], $data['correo'], $data['saldo']);
+        $response = $updateSql->fetch(PDO::FETCH_ASSOC);
+        $updateSql->closeCursor(); // Cerrar procedimiento almacenado
+
+  
         
-        $clientes->nombre = $data['nombre'];
-        $clientes->apellido = $data['apellido'];
-        $clientes->celular = $data['celular'];
-        $clientes->tipodocumentoid = $data['tipodocumento'];
-        $clientes->documento = $data['documento'];
-        $clientes->correo = $data['correo'];
-        
-        if($clientes->save()){
+        if($response['code'] == 200){
 
             $form->clear();
     
@@ -280,34 +278,14 @@ class clientesController extends ControllerBase
      */
     public function deleteAction($clienteid)
     {
-        $clientes = clientes::findFirst([
-            "clienteid = :id:" ,
-            'bind' => ['id' => $clienteid]
-        ]);       
 
-        if (!$clientes) {
-            $this->flash->error("Error al tratar eliminar a esta persona ");
+        //llamamos al modelo clientes
+        $clientes = new Clientes();
+        $data = $this->request->getPost();  
 
-            return $this->dispatcher->forward(
-                [
-                    "controller" => "clientes",
-                    "action"     => "index",
-                ]
-            );
-        }
-
-        if (!$clientes->delete()) {
-            foreach ($clientes->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-
-            return $this->dispatcher->forward(
-                [
-                    "controller" => "clientes",
-                    "action"     => "search",
-                ]
-            );
-        }
+        $deleteSql = $clientes->eliminarCliente($clienteid);
+        $response = $deleteSql->fetch(PDO::FETCH_ASSOC);
+        $deleteSql->closeCursor(); // Cerrar procedimiento almacenado
 
         $this->flash->success("Cliente Eliminado  con Exito");
 

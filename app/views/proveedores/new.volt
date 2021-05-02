@@ -4,7 +4,16 @@
     <hr>
 </div>
 
-<div style="margin-left: 20%;" class="col-md-12">
+<ul class="pager">
+    <li class="previous pull-left">
+        {{ link_to("proveedores", "&larr; Regresar") }}
+    </li>
+  <!--   <li class="pull-right">
+        {{ submit_button("Guardar", "class": "btn btn-success") }}
+    </li> -->
+</ul>
+
+<div  class="col-md-12">
     <form action="{{url('proveedores/create')}}" method="POST">        
         <div class="col-md-8">
             <input type="hidden" name="proveedorid" required class="form-control">

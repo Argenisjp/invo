@@ -19,7 +19,7 @@
         <th scope="col">Tipo de contrato</th>
         <th scope="col">Status</th>
         <th scope="col">Editar</th>
-        <th scope="col">Eliminar</th>
+        <th scope="col">Inactivar</th>
       </tr>
     </thead>
     <tbody>
@@ -35,7 +35,7 @@
             <td>{% if item.status == 1 %} ACTIVO {% else %} INACTIVO {% endif %}</td>
            
             <td width="7%">{{ link_to("proveedores/edit/" ~ item.id, '<i class=" glyphicon glyphicon-edit"></i> Editar', "class": "btn btn-info") }}</td>
-            <td width="7%">{{ link_to("proveedores/delete/" ~ item.id, '<i class=" glyphicon glyphicon-remove"></i> Eliminar', "class": "btn btn-danger") }}</td>
+            <td width="7%">{{ link_to("proveedores/delete/" ~ item.id, '<i class=" glyphicon glyphicon-off"></i> Inactivar', "class": "btn btn-danger") }}</td>
         </tr>
         {% endfor %}
     </tbody>

@@ -22,7 +22,7 @@
             <th>Salario</th>
             <th>Status</th>
             <th>Editar</th>
-            <th>Eliminar</th>
+            <th>Inactivar</th>
         </tr>
     </thead>
 {% endif %}
@@ -37,7 +37,7 @@
             <td>{{ persona.salario }}</td>
             <td>{% if persona.status == 1 %} ACTIVO {% else %} INACTIVO {% endif %}</td>
             <td width="7%">{{ link_to("personas/edit/" ~ persona.personasid, '<i class=" glyphicon glyphicon-edit"></i> Editar', "class": "btn btn-info") }}</td>
-            <td width="7%">{{ link_to("personas/delete/" ~ persona.personasid, '<i class=" glyphicon glyphicon-remove"></i> Eliminar', "class": "btn btn-danger") }}</td>
+            <td width="7%">{{ link_to("personas/delete/" ~ persona.personasid, '<i class=" glyphicon glyphicon-off"></i> Inactivar', "class": "btn btn-danger") }}</td>
         </tr>
     </tbody>
 {% if loop.last %}

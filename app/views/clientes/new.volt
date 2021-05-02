@@ -34,7 +34,13 @@
         <div class="col-md-8">
             <label for="">Correo:</label>
             <input type="imail" name="correo" required class="form-control">            
-        </div>   
+        </div>
+        <div class="col-md-8">
+            <label for="">Saldo:</label>
+            <input type="number" name="saldo" required class="form-control">            
+        </div>
+        
+ 
         
         <div class="col-md-8">
            <br>

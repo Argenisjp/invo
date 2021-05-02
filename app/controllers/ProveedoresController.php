@@ -225,22 +225,18 @@ class proveedoresController extends ControllerBase
             );
         }
 
-        //$form = new ProvedoresForm;
         $proveedores = new Proveedores();
         $data = $this->request->getPost();            
+                
+        $createdSql = $proveedores->createProveedor($data['nombre'], $data['apellido'], $data['tipodocumentoid'], $data['documento'], $data['tipocontratoid'], $data['status']);
+        $response = $createdSql->fetch(PDO::FETCH_ASSOC);
+        $createdSql->closeCursor(); // Cerrar procedimiento almacenado
+
         
-        $proveedores->nombre            = $data['nombre'];
-        $proveedores->apellido          = $data['apellido'];
-        $proveedores->tipodocumentoid   = $data['tipodocumentoid'];
-        $proveedores->documento         = $data['documento'];
-        /* $proveedores->fechaafiliacion   = $data['fechaafiliacion']; */
-        $proveedores->tipocontratoid    = $data['tipocontratoid'];
-        $proveedores->status            = $data['status'];
-        
-        if($proveedores->save()){
+        if($response['code'] == 200){
      
 
-            //$form->clear();
+           // $form->clear();
 
             $this->flash->success("proveedor Creado con exito");
     
@@ -294,20 +290,17 @@ class proveedoresController extends ControllerBase
         }
 
         $form = new ProveedoresForm;
-
-        $data = $this->request->getPost();        
+        $data = $this->request->getPost();  
         
-        $horaactual = date("Y-m-d H:m:s");        
+        $updateSql = $proveedores->actualizarProveedor($data['proveedorid'],$data['nombre'], $data['apellido'], $data['tipodocumento'], $data['documento'], $data['tipocontrato'], $data['status']);
+        $response = $updateSql->fetch(PDO::FETCH_ASSOC);
+        $updateSql->closeCursor(); // Cerrar procedimiento almacenado
+ 
+       // $form = new ProveedoresForm;
 
-        $proveedores->nombre            = $data['nombre'];
-        $proveedores->apellido          = $data['apellido'];
-        $proveedores->tipodocumentoid   = $data['tipodocumento'];
-        $proveedores->documento         = $data['documento'];
-        $proveedores->fechamodificacion = $horaactual;
-        $proveedores->tipocontratoid    = $data['tipocontrato'];
-        $proveedores->status            = $data['status'];
+       
         
-        if($proveedores->save()){
+        if($response['code'] == 200){
 
             $form->clear();
     
@@ -331,38 +324,20 @@ class proveedoresController extends ControllerBase
      */
     public function deleteAction($proveedorid)
     {
-        $proveedores = Proveedores::findFirst([
-            "proveedorid = :id:" ,
-            'bind' => ['id' => $proveedorid]
-        ]);       
-           
-        if (!$proveedores) {
-            $this->flash->error("Error al tratar eliminar a este proveedor ");
 
-            return $this->dispatcher->forward(
-                [
-                    "controller" => "proveedores",
-                    "action"     => "index",
-                ]
-            );
-        } 
+         //llamamos al modelo proveedores
+         $proveedores = new proveedores();
+         $data = $this->request->getPost();  
+ 
+         $deleteSql = $proveedores->inactivarProveedor($proveedorid);
+         $response = $deleteSql->fetch(PDO::FETCH_ASSOC);
+         $deleteSql->closeCursor(); // Cerrar procedimiento almacenado
 
-        if (!$proveedores->delete()) {
-            foreach ($proveedores->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-           
-            return $this->dispatcher->forward(
-                [
-                    "controller" => "proveedores",
-                    "action"     => "search",
-                ]
-            );
-        }
+     
             
         
 
-        $this->flash->success("Proveedor Eliminado  con Exito");
+        $this->flash->success("Proveedor Inactivado  con Exito");
 
         return $this->dispatcher->forward(
             [

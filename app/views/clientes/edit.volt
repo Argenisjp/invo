@@ -4,6 +4,13 @@
     <hr>
 </div>
 
+<ul class="pager">
+    <li class="previous pull-left">
+        {{ link_to("clientes", "&larr; Regresar") }}
+    </li>
+
+</ul>
+
 {% if dataclientes is defined %}
 
 <div  class="col-md-12">
@@ -42,11 +49,17 @@
         <div class="col-md-8">
             <label for="">Correo:</label>
             <input type="imail" name="correo" value="{{dataclientes.correo}}"  required class="form-control">            
-        </div>   
+        </div> 
+      
+        <div class="col-md-8">
+            <label for="">Saldo:</label>
+            <input type="number" name="saldo" id="saldo"  required class="form-control">            
+        </div> 
+    
         
         <div class="col-md-8">
            <br>
-            <button class="btn btn-success form-control ">Actualizar</button>
+           <button class="btn btn-success form-control "><i class=" glyphicon glyphicon-refresh "> Actualizar</i></button>
         </div>
     </form>    
 </div>
@@ -62,6 +75,12 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 {% if dataclientes is defined %}
 	<script>
+
+         //funcion para redondiar un numero decimal con la funcion Math.round()
+         var saldo = '{{dataclientes.saldo}}';        
+		$('#saldo').val(Math.round(saldo));
+
+
         var tipodocumento = '{{dataclientes.tipodocumentoid}}';        
 		$('#tipodocumento').val(tipodocumento);
 	</script>

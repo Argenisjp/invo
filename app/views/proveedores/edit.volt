@@ -4,6 +4,13 @@
     <hr>
 </div>
 
+<ul class="pager">
+    <li class="previous pull-left">
+        {{ link_to("proveedores", "&larr; Regresar") }}
+    </li>
+
+</ul>
+
 {% if dataproveedores is defined %}
 
 <div  class="col-md-12">
@@ -59,7 +66,7 @@
         
         <div class="col-md-8">
            <br>
-            <button class="btn btn-success form-control ">Actualizar</button>
+            <button class="btn btn-success form-control "><i class=" glyphicon glyphicon-refresh "> Actualizar</i></button>
         </div>
     </form>    
 </div>
@@ -72,8 +79,9 @@
     <hr>
 </div>
 
-<!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script> -->
+ 
 {% if dataproveedores is defined %}
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 	<script>
         var tipodocumento = '{{dataproveedores.tipodocumentoid}}';        
 		$('#tipodocumento').val(tipodocumento);

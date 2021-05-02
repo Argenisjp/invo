@@ -43,9 +43,36 @@ class Clientes extends Model
      */
     public $correo;
 
+
+    
         // Lista de tipos de documento
         public function getDatosClientes(){
           $sql = "SELECT c.*, td.nombre tipodocumento FROM clientes c JOIN tipodocumento td ON td.tipodocumentoid = c.tipodocumentoid";
+          $prepare = $this->getDi()->getShared("db")->prepare($sql);
+          $prepare->execute();
+          return $prepare;
+      }
+
+       // Consulta para crear un cliento por medio del procedimiento almacenado
+        public function createCliente($nombre,$apellido,$celular,$tipodocumento,$documento,$correo,$saldo){
+          $sql = "call crear_cliente('$nombre', '$apellido', '$celular', '$tipodocumento', '$documento', '$correo', '$saldo');";
+          $prepare = $this->getDi()->getShared("db")->prepare($sql);
+          $prepare->execute();
+          return $prepare;
+      }
+
+       // Consulta para Actualizar un cliento por medio del procedimiento almacenado
+        public function actualizarCliente($clienteid,$nombre,$apellido,$celular,$tipodocumento,$documento,$correo,$saldo){
+          $sql = "call actualizar_cliente('$clienteid','$nombre', '$apellido', '$celular', '$tipodocumento', '$documento', '$correo'), '$saldo');";
+          $prepare = $this->getDi()->getShared("db")->prepare($sql);
+          $prepare->execute();
+          return $prepare;
+      }
+       
+      
+      // Consulta para Eliminar un cliento por medio del procedimiento almacenado
+        public function eliminarCliente($clienteid){
+          $sql = "call eliminar_cliente('$clienteid');";
           $prepare = $this->getDi()->getShared("db")->prepare($sql);
           $prepare->execute();
           return $prepare;
