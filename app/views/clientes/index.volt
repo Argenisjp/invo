@@ -18,8 +18,9 @@
         <th scope="col">Documento</th>
         <th scope="col">Correo</th>
         <th scope="col">Saldo</th>
+        <th scope="col">Status</th>
         <th scope="col">Editar</th>
-        <th scope="col">Eliminar</th>
+        <th scope="col">Inactivar</th>
       </tr>
     </thead>
     <tbody>
@@ -33,9 +34,10 @@
             <td>{{item.documento}}</td>
             <td>{{item.correo}}</td>
             <td>{{item.saldo}}</td>
+            <td>{% if item.status == 1 %} ACTIVO {% else %} INACTIVO {% endif %}</td>
           
             <td width="7%">{{ link_to("clientes/edit/" ~ item.id, '<i class=" glyphicon glyphicon-edit"></i> Editar', "class": "btn btn-info") }}</td>
-            <td width="7%">{{ link_to("clientes/delete/" ~ item.id, '<i class=" glyphicon glyphicon-ban-circle"></i> Eliminar', "class": "btn btn-danger") }}</td>
+            <td width="7%">{{ link_to("clientes/delete/" ~ item.id, '<i class=" glyphicon glyphicon-ban-circle"></i> Inactivar', "class": "btn btn-danger") }}</td>
         </tr>
         {% endfor %}
     </tbody>

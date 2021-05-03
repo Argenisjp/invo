@@ -32,6 +32,7 @@ class clientesController extends ControllerBase
                 "documento"           =>  $list['documento'],
                 "correo"              =>  $list['correo'],
                 "saldo"              =>  $list['saldo'],
+                "status"              =>  $list['status'],
             ];
 
         }
@@ -185,7 +186,7 @@ class clientesController extends ControllerBase
         $clientes = new Clientes();
         $data = $this->request->getPost();            
                 
-        $createdSql = $clientes->createCliente($data['nombre'], $data['apellido'], $data['celular'], $data['tipodocumento'], $data['documento'], $data['correo'], $data['saldo']);
+        $createdSql = $clientes->createCliente($data['nombre'], $data['apellido'], $data['celular'], $data['tipodocumento'], $data['documento'], $data['correo'], $data['saldo'], $data['status']);
         $response = $createdSql->fetch(PDO::FETCH_ASSOC);
         $createdSql->closeCursor(); // Cerrar procedimiento almacenado
       /*   print_r($response);die; */
@@ -283,11 +284,11 @@ class clientesController extends ControllerBase
         $clientes = new Clientes();
         $data = $this->request->getPost();  
 
-        $deleteSql = $clientes->eliminarCliente($clienteid);
+        $deleteSql = $clientes->inactivarCliente($clienteid);
         $response = $deleteSql->fetch(PDO::FETCH_ASSOC);
         $deleteSql->closeCursor(); // Cerrar procedimiento almacenado
 
-        $this->flash->success("Cliente Eliminado  con Exito");
+        $this->flash->success("Cliente Inactivado  con Exito");
 
         return $this->dispatcher->forward(
             [

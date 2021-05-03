@@ -55,6 +55,17 @@
             <label for="">Saldo:</label>
             <input type="number" name="saldo" id="saldo"  required class="form-control">            
         </div> 
+
+        <div class="col-md-8">            
+            <label for="">Status:</label>                      
+            <select name="status" required id="status" class="form-control chosen">    
+                <option value="">Seleccione...</option>                                 
+                
+                    <option value="1">Activo</option>
+                    <option value="2">Inactivo</option>
+                                
+            </select>
+        </div> 
     
         
         <div class="col-md-8">
@@ -83,6 +94,10 @@
 
         var tipodocumento = '{{dataclientes.tipodocumentoid}}';        
 		$('#tipodocumento').val(tipodocumento);
+
+        var status = '{{dataproveedores.status}}';        
+		$('#status').val(status);
+        
 	</script>
 {% endif %}
 

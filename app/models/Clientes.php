@@ -54,8 +54,8 @@ class Clientes extends Model
       }
 
        // Consulta para crear un cliento por medio del procedimiento almacenado
-        public function createCliente($nombre,$apellido,$celular,$tipodocumento,$documento,$correo,$saldo){
-          $sql = "call crear_cliente('$nombre', '$apellido', '$celular', '$tipodocumento', '$documento', '$correo', '$saldo');";
+        public function createCliente($nombre,$apellido,$celular,$tipodocumento,$documento,$correo,$saldo,$status){
+          $sql = "call crear_cliente('$nombre', '$apellido', '$celular', '$tipodocumento', '$documento', '$correo', '$saldo', '$status');";
           $prepare = $this->getDi()->getShared("db")->prepare($sql);
           $prepare->execute();
           return $prepare;
@@ -73,6 +73,14 @@ class Clientes extends Model
       // Consulta para Eliminar un cliento por medio del procedimiento almacenado
         public function eliminarCliente($clienteid){
           $sql = "call eliminar_cliente('$clienteid');";
+          $prepare = $this->getDi()->getShared("db")->prepare($sql);
+          $prepare->execute();
+          return $prepare;
+      }
+
+         // Consulta para inactivar un cliente por medio del procedimiento almacenado
+         public function inactivarCliente($clienteid){
+          $sql = "call inactivar_cliente('$clienteid');";
           $prepare = $this->getDi()->getShared("db")->prepare($sql);
           $prepare->execute();
           return $prepare;
