@@ -119,6 +119,36 @@ class clientesController extends ControllerBase
     }
 
     /**
+     * Recargar  clientes basado en su id
+     * @param string $id
+     * 
+     */
+    public function recargaAction($clienteid)
+    {      
+        if (!$this->request->isPost()) {
+
+            $clientes = clientes::findFirst([
+                "clienteid = :id:" ,
+                'bind' => ['id' => $clienteid]
+            ]);
+            
+            if (!$clientes) {
+                $this->flash->error("Error para Recargar");
+
+                return $this->dispatcher->forward(
+                    [
+                        "controller" => "clientes",
+                        "action"     => "index",
+                    ]
+                );
+            }
+            
+            $this->view->dataclientes = $clientes;
+        }
+    }
+
+
+    /**
      * Editar  clientes basado en su id
      * @param string $id
      * 
@@ -185,11 +215,11 @@ class clientesController extends ControllerBase
 
         $clientes = new Clientes();
         $data = $this->request->getPost();            
-                
+          
         $createdSql = $clientes->createCliente($data['nombre'], $data['apellido'], $data['celular'], $data['tipodocumento'], $data['documento'], $data['correo'], $data['saldo'], $data['status']);
         $response = $createdSql->fetch(PDO::FETCH_ASSOC);
         $createdSql->closeCursor(); // Cerrar procedimiento almacenado
-      /*   print_r($response);die; */
+      
        
         if($response['code'] == 200){
      
@@ -249,7 +279,7 @@ class clientesController extends ControllerBase
         $form = new ClientesForm;
         $data = $this->request->getPost();  
 
-        $updateSql = $clientes->actualizarCliente($data['clienteid'],$data['nombre'], $data['apellido'], $data['celular'], $data['tipodocumento'], $data['documento'], $data['correo'], $data['saldo']);
+        $updateSql = $clientes->actualizarCliente($data['clienteid'],$data['nombre'], $data['apellido'], $data['celular'], $data['tipodocumento'], $data['documento'], $data['correo'], $data['status']);
         $response = $updateSql->fetch(PDO::FETCH_ASSOC);
         $updateSql->closeCursor(); // Cerrar procedimiento almacenado
 
@@ -260,6 +290,78 @@ class clientesController extends ControllerBase
             $form->clear();
     
             $this->flash->success("Cliente actualizado con exito");
+    
+            return $this->dispatcher->forward(
+                [
+                    "controller" => "clientes",
+                    "action"     => "index",
+                ]
+            );
+
+        }
+
+    }
+
+      /**
+     * Guarda la recarga segun el id del cliente
+     *
+     * @param string $clienteid
+     */
+    public function saveRecargaAction(){
+
+        if (!$this->request->isPost()) {
+            return $this->dispatcher->forward(
+                [
+                    "clienteid = :id:" ,
+                    'bind' => ['id' => $clienteid]
+                ]
+            );
+        }
+
+        $id = $this->request->getPost("clienteid", "int");
+        
+        //verificar si el id de la cliente existe
+        $clientes =  Clientes::findFirst([
+            "conditions" => "clienteid = ?1",
+            "bind" => array(1 =>  $id)
+        ]); 
+                
+        if (!$clientes) {
+            $this->flash->error("clientes no existe");
+
+            return $this->dispatcher->forward(
+                [
+                    "controller" => "clientes",
+                    "action"     => "index",
+                ]
+            );
+        }
+
+        $form = new ClientesForm;
+        $data = $this->request->getPost();  
+        
+        $updateSql = $clientes->recargarCliente($data['clienteid'],$data['saldo']);
+        $response = $updateSql->fetch(PDO::FETCH_ASSOC);
+        $updateSql->closeCursor(); // Cerrar procedimiento almacenado
+        
+        if($response['code'] == 200){
+
+            $form->clear();
+    
+            $this->flash->success("Cliente actualizado con exito");
+    
+            return $this->dispatcher->forward(
+                [
+                    "controller" => "clientes",
+                    "action"     => "index",
+                ]
+            );
+
+        }else if($response['code'] == 202){
+
+            $form->clear();
+
+            $this->flash->warning($response['response']);
     
             return $this->dispatcher->forward(
                 [
@@ -296,5 +398,29 @@ class clientesController extends ControllerBase
                 "action"     => "index",
             ]
         );
+    }
+
+    
+    /**
+     * Muestra la acción del índice.
+     */
+    public function transferenciaAction()
+    {
+        //llamamos al modelo he imprimimos los datos de la consulta
+        $Datosclientes = new Clientes;
+        $DatosclientesSql = $Datosclientes->getDatosClientesActivos();  
+
+        foreach ($DatosclientesSql as $list) {
+            
+            $data[] = [
+                "id"                  =>  $list['clienteid'],
+                "cliente"             =>  $list['cliente'],
+            ];
+
+        }
+
+        $data = json_encode($data);
+        $this->view->dataclientes = json_decode($data);
+       
     }
 }

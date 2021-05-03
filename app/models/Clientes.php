@@ -62,8 +62,8 @@ class Clientes extends Model
       }
 
        // Consulta para Actualizar un cliento por medio del procedimiento almacenado
-        public function actualizarCliente($clienteid,$nombre,$apellido,$celular,$tipodocumento,$documento,$correo,$saldo){
-          $sql = "call actualizar_cliente('$clienteid','$nombre', '$apellido', '$celular', '$tipodocumento', '$documento', '$correo'), '$saldo');";
+        public function actualizarCliente($clienteid,$nombre,$apellido,$celular,$tipodocumento,$documento,$correo,$status){
+          $sql = "call actualizar_cliente('$clienteid','$nombre', '$apellido', '$celular', '$tipodocumento', '$documento', '$correo', '$status');";
           $prepare = $this->getDi()->getShared("db")->prepare($sql);
           $prepare->execute();
           return $prepare;
@@ -81,6 +81,22 @@ class Clientes extends Model
          // Consulta para inactivar un cliente por medio del procedimiento almacenado
          public function inactivarCliente($clienteid){
           $sql = "call inactivar_cliente('$clienteid');";
+          $prepare = $this->getDi()->getShared("db")->prepare($sql);
+          $prepare->execute();
+          return $prepare;
+      }
+
+        // Consulta para recargar un cliento por medio del procedimiento almacenado
+        public function recargarCliente($clienteid,$saldo){
+          $sql = "call recargaCliente('$clienteid','$saldo');";
+          $prepare = $this->getDi()->getShared("db")->prepare($sql);
+          $prepare->execute();
+          return $prepare;
+      }
+
+        // Lista de tipos de documento
+        public function getDatosClientesActivos(){
+          $sql = "SELECT clienteid, CONCAT(nombre,' ',apellido) as cliente FROM invo.clientes WHERE status = 1;";
           $prepare = $this->getDi()->getShared("db")->prepare($sql);
           $prepare->execute();
           return $prepare;

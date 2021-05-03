@@ -51,10 +51,7 @@
             <input type="imail" name="correo" value="{{dataclientes.correo}}"  required class="form-control">            
         </div> 
       
-        <div class="col-md-8">
-            <label for="">Saldo:</label>
-            <input type="number" name="saldo" id="saldo"  required class="form-control">            
-        </div> 
+      
 
         <div class="col-md-8">            
             <label for="">Status:</label>                      
@@ -95,7 +92,7 @@
         var tipodocumento = '{{dataclientes.tipodocumentoid}}';        
 		$('#tipodocumento').val(tipodocumento);
 
-        var status = '{{dataproveedores.status}}';        
+        var status = '{{dataclientes.status}}';        
 		$('#status').val(status);
         
 	</script>
