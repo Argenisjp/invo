@@ -6,11 +6,11 @@
     {{ link_to("clientes/new", "Agregar Cliente", "class": "btn btn-primary") }}
 </div>
 <div align="left">
-    {{ link_to("clientes/transferencia", "Transferirencia ", "class": "btn btn-info") }}
+    {{ link_to("clientes/transferencia", "Transferirencia ", "class": "btn btn-success") }}
 </div>
 
 {% if clientes is defined %}
-<table class="table table-bordered table-hover ">
+<table style="margin-top: 5px;" class="table table-bordered table-hover">
     <thead>
       <tr>
         <th scope="col">Id</th>

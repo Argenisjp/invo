@@ -14,7 +14,7 @@
 {% if dataclientes is defined %}
 
 <div  class="col-md-12">
-    <form action="{{url('clientes/saveTranferencia')}}" method="POST">      
+    <form action="{{url('clientes/saveTransferencia')}}" method="POST">      
         
         <input type="hidden" name="clienteid" value="{{dataclientes.clienteid}}">
 
@@ -29,7 +29,7 @@
         </div>
         <div class="col-md-8">
             <label for="">Valor a transferir:</label>
-            <input type="number" name="valorTranferencia" required class="form-control">            
+            <input type="number" name="saldo" required class="form-control">            
         </div>          
 
         <div class="col-md-8">            
@@ -45,7 +45,7 @@
         
         <div class="col-md-8">
            <br>
-           <button class="btn btn-success form-control "><i class=" glyphicon glyphicon-refresh "> Recargar</i></button>
+           <button class="btn btn-success form-control "><i class=" glyphicon glyphicon-usd "> Transferir </i></button>
         </div>
     </form>  
 

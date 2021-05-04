@@ -94,9 +94,17 @@ class Clientes extends Model
           return $prepare;
       }
 
-        // Lista de tipos de documento
+        // Lista  de clientes
         public function getDatosClientesActivos(){
           $sql = "SELECT clienteid, CONCAT(nombre,' ',apellido) as cliente FROM invo.clientes WHERE status = 1;";
+          $prepare = $this->getDi()->getShared("db")->prepare($sql);
+          $prepare->execute();
+          return $prepare;
+      }
+
+         // Consulta para Transferir saldo a un cliento por medio del procedimiento almacenado
+         public function transferenciaCliente($usertranid,$saldo,$userrecibeid){
+          $sql = "call transferenciaCliente('$usertranid','$saldo','$userrecibeid');";
           $prepare = $this->getDi()->getShared("db")->prepare($sql);
           $prepare->execute();
           return $prepare;

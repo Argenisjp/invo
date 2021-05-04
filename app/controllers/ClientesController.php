@@ -348,7 +348,7 @@ class clientesController extends ControllerBase
 
             $form->clear();
     
-            $this->flash->success("Cliente actualizado con exito");
+            $this->flash->success("Recarga Exitosa");
     
             return $this->dispatcher->forward(
                 [
@@ -422,5 +422,88 @@ class clientesController extends ControllerBase
         $data = json_encode($data);
         $this->view->dataclientes = json_decode($data);
        
+    }
+
+
+
+
+
+
+
+
+    
+      /**
+     * Guarda la Transferencia segun el id del cliente
+     *
+     * @param string $clienteid
+     */
+    public function saveTransferenciaAction(){
+
+        if (!$this->request->isPost()) {
+            return $this->dispatcher->forward(
+                [
+                    "clienteid = :id:" ,
+                    'bind' => ['id' => $clienteid]
+                ]
+            );
+        }
+
+        $id = $this->request->getPost("clienteid", "int");
+        
+        //verificar si el id de la cliente existe
+        $clientes =  Clientes::findFirst([
+            "conditions" => "clienteid = ?1",
+            "bind" => array(1 =>  $id)
+        ]); 
+                
+        if (!$clientes) {
+            $this->flash->error("clientes no existe");
+
+            return $this->dispatcher->forward(
+                [
+                    "controller" => "clientes",
+                    "action"     => "index",
+                ]
+            );
+        }
+
+        $form = new ClientesForm;
+        $clientes = new Clientes();
+        $data = $this->request->getPost();  
+        
+        $updateSql = $clientes->transferenciaCliente($data['clienteTranferencia'],$data['saldo'],$data['clienteTranferir']);
+        $response = $updateSql->fetch(PDO::FETCH_ASSOC);
+      
+        print_r($response);die;
+        $updateSql->closeCursor(); // Cerrar procedimiento almacenado
+       
+        if($response['code'] == 200){
+
+            $form->clear();
+    
+            $this->flash->success("Transferencia Exitosa");
+    
+            return $this->dispatcher->forward(
+                [
+                    "controller" => "clientes",
+                    "action"     => "index",
+                ]
+            );
+          
+        }else if($response['code'] == 202){
+
+            $form->clear();
+
+            $this->flash->warning($response['response']);
+    
+            return $this->dispatcher->forward(
+                [
+                    "controller" => "clientes",
+                    "action"     => "index",
+                ]
+            );
+
+        }
+
     }
 }
