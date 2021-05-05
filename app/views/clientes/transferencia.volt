@@ -21,7 +21,7 @@
         <div class="col-md-8">            
             <label for="">Cliente de la Transferencia:</label>                      
             <select name="clienteTranferencia" required id="clienteTranferencia" class="form-control">    
-                <option value="">Seleccione...</option>                                 
+                <option  disabled selected  value="">Seleccione...</option>                                 
                 {% for item in dataclientes %}
                     <option value="{{item.id}}">{{item.cliente}}</option>
                 {% endfor %}                
@@ -35,7 +35,7 @@
         <div class="col-md-8">            
             <label for="">Cliente a Transferir:</label>                      
             <select name="clienteTranferir" required id="clienteTranferir" class="form-control">    
-                <option value="">Seleccione...</option>                                 
+                <option  disabled selected  value="">Seleccione...</option>                                 
                 {% for item in dataclientes %}
                     <option value="{{item.id}}">{{item.cliente}}</option>
                 {% endfor %}                
@@ -45,7 +45,7 @@
         
         <div class="col-md-8">
            <br>
-           <button class="btn btn-success form-control "><i class=" glyphicon glyphicon-usd "> Transferir </i></button>
+           <button class="btn btn-success form-control "><i class="glyphicon glyphicon-usd "></i> TRANSFERIR</button>
         </div>
     </form>  
 
@@ -63,8 +63,15 @@
 {% if dataclientes is defined %}
 	<script>
 
-    
+$("#clienteTranferencia").on("change",function(){
+        var valor = $(this).val();
+        console.log(valor)
+        $("#clienteTranferir").find("option[value='"+valor+"']").prop("disabled",true);
+    });
         
 	</script>
 {% endif %}
+
+
+
 

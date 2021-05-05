@@ -448,7 +448,7 @@ class clientesController extends ControllerBase
             );
         }
 
-        $id = $this->request->getPost("clienteid", "int");
+        $id = $this->request->getPost("clienteTranferencia", "int");
         
         //verificar si el id de la cliente existe
         $clientes =  Clientes::findFirst([
@@ -456,7 +456,7 @@ class clientesController extends ControllerBase
             "bind" => array(1 =>  $id)
         ]); 
                 
-        if (!$clientes) {
+         if (!$clientes) {
             $this->flash->error("clientes no existe");
 
             return $this->dispatcher->forward(
@@ -465,7 +465,7 @@ class clientesController extends ControllerBase
                     "action"     => "index",
                 ]
             );
-        }
+        } 
 
         $form = new ClientesForm;
         $clientes = new Clientes();
@@ -474,7 +474,7 @@ class clientesController extends ControllerBase
         $updateSql = $clientes->transferenciaCliente($data['clienteTranferencia'],$data['saldo'],$data['clienteTranferir']);
         $response = $updateSql->fetch(PDO::FETCH_ASSOC);
       
-        print_r($response);die;
+    
         $updateSql->closeCursor(); // Cerrar procedimiento almacenado
        
         if($response['code'] == 200){

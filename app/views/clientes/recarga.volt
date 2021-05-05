@@ -26,7 +26,7 @@
         
         <div class="col-md-8">
            <br>
-           <button class="btn btn-success form-control "><i class=" glyphicon glyphicon-refresh "> Recargar</i></button>
+           <button class="btn btn-success form-control "><i class=" glyphicon glyphicon-download-alt"></i> RECARGAR</button>
         </div>
     </form>  
 
