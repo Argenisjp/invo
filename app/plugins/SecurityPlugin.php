@@ -51,7 +51,7 @@ class SecurityPlugin extends Plugin
                 'invoices'     => ['index', 'profile'],
                 'personas'     => ['index', 'search', 'new', 'edit', 'save', 'create', 'delete'],
                 'clientes'     => ['index', 'search', 'new', 'edit', 'save', 'create', 'delete', 'recarga','saveRecarga','transferencia','saveTransferencia'],
-                'proveedores'  => ['index', 'search', 'new', 'edit', 'save', 'create', 'delete'],
+                'proveedores'  => ['index', 'search', 'new', 'edit', 'save', 'create', 'delete', 'recarga','saveRecarga'],
             ];
             foreach ($privateResources as $resource => $actions) {
                 $acl->addResource(

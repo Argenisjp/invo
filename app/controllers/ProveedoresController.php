@@ -31,9 +31,10 @@ class proveedoresController extends ControllerBase
                 "documento"           =>  $list['documento'],
                 "fechaafiliacion"     =>  $list['fechaafiliacion'],
                 "tipocontratoid"      =>  $list['tipocontrato'],
+                "saldo"               =>  $list['saldo'],
                 "status"              =>  $list['status'],
             ];
-           /*  print_r($data);die; */
+         
         }
         
         $data = json_encode($data);
@@ -137,12 +138,112 @@ class proveedoresController extends ControllerBase
             ]
         );
 
-
-      /*  
- */
-
      
     }
+
+
+        /**
+     *Funcion para Recargar proveedor basado en su id
+     * @param string $id
+     * 
+     */
+    public function recargaAction($proveedorid)
+    {      
+        if (!$this->request->isPost()) {
+
+            $proveedores = Proveedores::findFirst([
+                "proveedorid = :id:" ,
+                'bind' => ['id' => $proveedorid]
+            ]);
+            
+            if (!$proveedores) {
+                $this->flash->error("Error para Recargar");
+
+                return $this->dispatcher->forward(
+                    [
+                        "controller" => "proveedores",
+                        "action"     => "index",
+                    ]
+                );
+            }
+            
+            $this->view->dataproveedores = $proveedores;
+        }
+    }
+
+    
+      /**
+     * Funcion para Guarda la recarga segun el id del cliente
+     *
+     * @param string $proveedorid
+     */
+    public function saveRecargaAction(){
+
+        if (!$this->request->isPost()) {
+            return $this->dispatcher->forward(
+                [
+                    "proveedorid = :id:" ,
+                    'bind' => ['id' => $proveedores]
+                ]
+            );
+        }
+
+        $id = $this->request->getPost("proveedorid", "int");
+        
+        //verificar si el id de la proveedor existe
+        $proveedores =  Proveedores::findFirst([
+            "conditions" => "proveedorid = ?1",
+            "bind" => array(1 =>  $id)
+        ]); 
+                
+        if (!$proveedores) {
+            $this->flash->error("El proveedor no existe");
+
+            return $this->dispatcher->forward(
+                [
+                    "controller" => "proveedores",
+                    "action"     => "index",
+                ]
+            );
+        }
+
+        $form = new ProveedoresForm;
+        $data = $this->request->getPost();  
+        
+        $recargaSql = $proveedores->recargarProveedor($data['proveedorid'],$data['saldo']);
+        $response = $recargaSql->fetch(PDO::FETCH_ASSOC);
+        $recargaSql->closeCursor(); // Cerrar procedimiento almacenado
+        
+        if($response['code'] == 200){
+
+            $form->clear();
+    
+            $this->flash->success("Recarga Exitosa");
+    
+            return $this->dispatcher->forward(
+                [
+                    "controller" => "proveedores",
+                    "action"     => "index",
+                ]
+            );
+
+        }else if($response['code'] == 202){
+
+            $form->clear();
+
+            $this->flash->warning($response['response']);
+    
+            return $this->dispatcher->forward(
+                [
+                    "controller" => "proveedores",
+                    "action"     => "index",
+                ]
+            );
+
+        }
+
+    }
+
 
     /**
      * Editar  proveedores basado en su id
@@ -228,7 +329,7 @@ class proveedoresController extends ControllerBase
         $proveedores = new Proveedores();
         $data = $this->request->getPost();            
                 
-        $createdSql = $proveedores->createProveedor($data['nombre'], $data['apellido'], $data['tipodocumentoid'], $data['documento'], $data['tipocontratoid'], $data['status']);
+        $createdSql = $proveedores->createProveedor($data['nombre'], $data['apellido'], $data['tipodocumentoid'], $data['documento'], $data['tipocontratoid'], $data['saldo'], $data['status']);
         $response = $createdSql->fetch(PDO::FETCH_ASSOC);
         $createdSql->closeCursor(); // Cerrar procedimiento almacenado
 

@@ -54,8 +54,8 @@ class Proveedores extends Model
       }
 
         // Consulta para crear un proveedor por medio del procedimiento almacenado
-        public function createProveedor($nombre,$apellido,$tipodocumento,$documento,$tipocontratoid,$status){
-          $sql = "call crear_proveedor('$nombre', '$apellido', '$tipodocumento', '$documento','$tipocontratoid','$status');";
+        public function createProveedor($nombre,$apellido,$tipodocumento,$documento,$tipocontratoid,$saldo,$status){
+          $sql = "call crear_proveedor('$nombre', '$apellido', '$tipodocumento', '$documento','$tipocontratoid','$saldo','$status');";
           $prepare = $this->getDi()->getShared("db")->prepare($sql);
           $prepare->execute();
           return $prepare;
@@ -75,4 +75,12 @@ class Proveedores extends Model
         $prepare->execute();
         return $prepare;
     }
+
+        // Consulta para recargar un proveedor por medio del procedimiento almacenado
+        public function recargarProveedor($proveedorid,$saldo){
+          $sql = "call recargaProveedor('$proveedorid','$saldo');";
+          $prepare = $this->getDi()->getShared("db")->prepare($sql);
+          $prepare->execute();
+          return $prepare;
+      }
 }

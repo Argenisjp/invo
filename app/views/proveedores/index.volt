@@ -17,7 +17,9 @@
         <th scope="col">Documento</th>
         <th scope="col">Fecha de afiliación</th>
         <th scope="col">Tipo de contrato</th>
+        <th scope="col">Saldo</th>
         <th scope="col">Status</th>
+        <th scope="col">Recargar</th>
         <th scope="col">Editar</th>
         <th scope="col">Inactivar</th>
       </tr>
@@ -32,8 +34,12 @@
             <td>{{item.documento}}</td>
             <td>{{item.fechaafiliacion}}</td>
             <td>{{item.tipocontratoid}}</td>
+            <td>{{item.saldo}}</td>
             <td>{% if item.status == 1 %} ACTIVO {% else %} INACTIVO {% endif %}</td>
            
+            
+            <td width="7%">{{ link_to("proveedores/recarga/" ~ item.id, '<i class=" glyphicon glyphicon-open"></i> Recarga', "class": "btn btn-success") }}</td>
+
             <td width="7%">{{ link_to("proveedores/edit/" ~ item.id, '<i class=" glyphicon glyphicon-edit"></i> Editar', "class": "btn btn-info") }}</td>
             <td width="7%">{{ link_to("proveedores/delete/" ~ item.id, '<i class=" glyphicon glyphicon-eye-close"></i> Inactivar', "class": "btn btn-danger") }}</td>
         </tr>

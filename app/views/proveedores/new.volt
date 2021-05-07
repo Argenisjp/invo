@@ -42,10 +42,7 @@
             <label for="">Documento:</label>
             <input type="number" name="documento" required class="form-control">            
         </div>  
-    <!--     <div class="col-md-8">
-            <label for="">Fecha de afiliación:</label>
-            <input type="date" name="fechaafiliacion" required class="form-control">            
-        </div>  -->
+ 
         <div class="col-md-8">            
             <label for="">Tipo de contrato:</label>                      
             <select name="tipocontratoid" required id="tipocontrato" class="form-control chosen">    
@@ -54,7 +51,12 @@
                     <option value="{{item.id}}">{{item.nombre}}</option>
                 {% endfor %}                
             </select>
-        </div>   
+        </div> 
+        
+        <div class="col-md-8">
+            <label for="">Saldo:</label>
+            <input type="number" name="saldo" required class="form-control">            
+        </div>  
 
         <div class="col-md-8">            
             <label for="">Status:</label>                      
