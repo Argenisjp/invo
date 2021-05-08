@@ -4,7 +4,14 @@
     <hr>
 </div>
 
-<div style="margin-left: 20%;" class="col-md-12">
+<ul class="pager">
+    <li class="previous pull-left">
+        {{ link_to("clientes", "&larr; Regresar") }}
+    </li>
+
+</ul>
+
+<div  class="col-md-12">
     <form action="{{url('clientes/create')}}" method="POST">        
         <div class="col-md-8">
             <label for="">Nombres:</label>
@@ -16,7 +23,7 @@
         </div>         
         <div class="col-md-8">
             <label for="">Celular:</label>
-            <input type="number" name="celular" required  class="form-control">            
+            <input type="number" name="celular" required  class="form-control" min="1">            
         </div>         
         <div class="col-md-8">            
             <label for="">Tipo de documento:</label>                      
@@ -37,7 +44,7 @@
         </div>
         <div class="col-md-8">
             <label for="">Saldo:</label>
-            <input type="number" name="saldo" required class="form-control">            
+            <input type="number" name="saldo" required class="form-control" min="1">            
         </div>
         <div class="col-md-8">            
             <label for="">Status:</label>                      

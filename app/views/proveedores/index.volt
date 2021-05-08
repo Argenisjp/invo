@@ -6,8 +6,12 @@
     {{ link_to("proveedores/new", "Agregar proveedor", "class": "btn btn-primary") }}
 </div>
 
+<div align="left">
+    {{ link_to("proveedores/transferencia", "Transferirencia ", "class": "btn btn-success") }}
+</div>
+
 {% if proveedores is defined %}
-<table class="table table-bordered table-hover">
+<table style="margin-top: 10px;" class="table table-bordered table-hover">
     <thead>
       <tr>
         <th scope="col">Id</th>

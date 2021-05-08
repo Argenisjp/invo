@@ -83,4 +83,20 @@ class Proveedores extends Model
           $prepare->execute();
           return $prepare;
       }
+
+        // Lista  de proveedores
+        public function getDatosProveedoresActivos(){
+          $sql = "SELECT proveedorid, CONCAT(nombre,' ',apellido) as proveedores FROM invo.proveedores WHERE status = 1;";
+          $prepare = $this->getDi()->getShared("db")->prepare($sql);
+          $prepare->execute();
+          return $prepare;
+      }
+
+          // Consulta para Transferir saldo a un proveedor por medio del procedimiento almacenado
+          public function transferenciaProveedor($usertranid,$saldo,$userrecibeid){
+            $sql = "call transferenciaProveedor('$usertranid','$saldo','$userrecibeid');";
+            $prepare = $this->getDi()->getShared("db")->prepare($sql);
+            $prepare->execute();
+            return $prepare;
+        }
 }

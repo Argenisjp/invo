@@ -142,6 +142,32 @@ class proveedoresController extends ControllerBase
     }
 
 
+        
+    /**
+     * Muestra la acción del índice.
+     */
+    public function transferenciaAction()
+    {
+        //llamamos al modelo he imprimimos los datos de la consulta
+        $Datosproveedores = new Proveedores;
+        $DatosproveedoresSql = $Datosproveedores->getDatosProveedoresActivos();  
+
+        foreach ($DatosproveedoresSql as $list) {
+            
+            $data[] = [
+                "id"                  =>  $list['proveedorid'],
+                "proveedores"         =>  $list['proveedores'],
+            ];
+
+        }
+
+        $data = json_encode($data);
+        $this->view->dataproveedores = json_decode($data);
+       
+    }
+
+
+
         /**
      *Funcion para Recargar proveedor basado en su id
      * @param string $id
@@ -227,6 +253,82 @@ class proveedoresController extends ControllerBase
                 ]
             );
 
+        }else if($response['code'] == 202){
+
+            $form->clear();
+
+            $this->flash->warning($response['response']);
+    
+            return $this->dispatcher->forward(
+                [
+                    "controller" => "proveedores",
+                    "action"     => "index",
+                ]
+            );
+
+        }
+
+    }
+
+
+       /**
+     * Guarda la Transferencia segun el id del proveedor
+     *
+     * @param string $proveedorid
+     */
+    public function saveTransferenciaAction(){
+
+        if (!$this->request->isPost()) {
+            return $this->dispatcher->forward(
+                [
+                    "proveedorid = :id:" ,
+                    'bind' => ['id' => $proveedorid]
+                ]
+            );
+        }
+
+        $id = $this->request->getPost("proveedorTranferencia", "int");
+        
+        //verificar si el id de la proveedor existe
+        $proveedores =  Proveedores::findFirst([
+            "conditions" => "proveedorid = ?1",
+            "bind" => array(1 =>  $id)
+        ]); 
+                
+         if (!$proveedores) {
+            $this->flash->error("proveedor no existe");
+
+            return $this->dispatcher->forward(
+                [
+                    "controller" => "proveedores",
+                    "action"     => "index",
+                ]
+            );
+        } 
+
+        $form = new ProveedoresForm;
+        $proveedores = new Proveedores();
+        $data = $this->request->getPost();  
+        
+        $updateSql = $proveedores->transferenciaProveedor($data['proveedorTranferencia'],$data['saldo'],$data['proveedorTranferir']);
+        $response = $updateSql->fetch(PDO::FETCH_ASSOC);
+
+    
+        $updateSql->closeCursor(); // Cerrar procedimiento almacenado
+       
+        if($response['code'] == 200){
+
+            $form->clear();
+    
+            $this->flash->success("Transferencia Exitosa");
+    
+            return $this->dispatcher->forward(
+                [
+                    "controller" => "proveedores",
+                    "action"     => "index",
+                ]
+            );
+          
         }else if($response['code'] == 202){
 
             $form->clear();

@@ -40,7 +40,7 @@
       
         <div class="col-md-8">
             <label for="">Documento:</label>
-            <input type="number" name="documento" required class="form-control">            
+            <input type="number" name="documento" required class="form-control" min="1">            
         </div>  
  
         <div class="col-md-8">            
@@ -55,7 +55,7 @@
         
         <div class="col-md-8">
             <label for="">Saldo:</label>
-            <input type="number" name="saldo" required class="form-control">            
+            <input type="number" name="saldo" required class="form-control" min="1">            
         </div>  
 
         <div class="col-md-8">            
